@@ -89,7 +89,7 @@ int main(int argc, char* argv[]){
     int err;
 
     char* model;
-    float* vertices = NULL;
+    float* vertices = malloc(sizeof(float) * 5000); //TODO
     int nVertices;
 
     if ((err = validate_args(--argc, ++argv))){
@@ -99,22 +99,19 @@ int main(int argc, char* argv[]){
     --argc; ++argv;
 
     if        (strcmp(model, "plane")  == 0){
-        vertices = create_plane();
+        nVertices = create_plane(vertices);
 
     } else if (strcmp(model, "box")    == 0){
-        vertices = create_box(atof(argv[0]), atof(argv[1]), atof(argv[2]));
+        nVertices = create_box(vertices, atof(argv[0]), atof(argv[1]), atof(argv[2]));
 
     } else if (strcmp(model, "sphere") == 0){
-        vertices = create_sphere(atof(argv[0]), atoi(argv[1]), atoi(argv[2]));
+        nVertices = create_sphere(vertices, atof(argv[0]), atoi(argv[1]), atoi(argv[2]));
         
     } else if (strcmp(model, "cone")   == 0){
-        vertices = create_cone(atof(argv[0]), atof(argv[1]), atoi(argv[2]), atoi(argv[3]));
+        nVertices = create_cone(vertices, atof(argv[0]), atof(argv[1]), atoi(argv[2]), atoi(argv[3]));
     } 
 
-    nVertices = vertices[0];
     assert(nVertices % 3 == 0);
-    /* int vertices[] = {18, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1}; */
-
     print_vertices(vertices + 1, vertices[0]);
 
     return 0;

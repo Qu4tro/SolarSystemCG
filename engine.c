@@ -3,8 +3,40 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <assert.h>
 
-int* read_model(char* filename);
+#include "errors.h"
+#include "utils.h"
+
+#define MODEL_MAX_LINE_LENGTH 100
+
+
+
+int read_model(char* filename, float* vertices, int* n){
+
+    char* line = malloc(sizeof(char) * MODEL_MAX_LINE_LENGTH);
+    char** separatedLine;
+
+    FILE* modelfp = fopen(filename, "r");
+
+    *n = 0;
+
+    while (fgets(line, MODEL_MAX_LINE_LENGTH, modelfp)){
+
+        separatedLine = split(strtok(line, "\r\n"));
+        assert(nParams(separatedLine) == 3);
+
+        //validar
+        vertices[*n] = atof(separatedLine[*n % 3]);
+
+        //to debug
+        if (vertices[*n] == 0){
+            printf("Atof got zero: %s\n", separatedLine[*n % 3]);
+        }
+    }
+    
+    return NO_ERROR;
+}
 
 int load_scene(char* xml_scene_filename);
 
@@ -13,8 +45,9 @@ void changeSize(int w, int h) {
 
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window with zero width).
-	if(h == 0)
+	if (h == 0){
 		h = 1;
+    }
 
 	// compute window's aspect ratio 
 	float ratio = w * 1.0 / h;
@@ -106,14 +139,27 @@ void renderScene(void) {
 
 
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv){
+
+    int n = 0;
+    float* vertices;
 
     if (argc <= 1){
         printf("Precisa de ter um ficheiro xml como argumento.");
         return -1;
     } 
 
-    load_scene(argv[1]);
+    /* load_scene(argv[1]); */
+    
+    read_model("teste.txt", vertices, &n);
+
+    int i;
+    for (i = 0; i < n; i += 3) {
+        printf("Ponto: "); 
+        printf("%f %f %f\n", vertices[i],
+                             vertices[i+1],
+                             vertices[i+2]); 
+    }
 
     return 0;
 

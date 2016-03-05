@@ -1,15 +1,23 @@
 # Declaration of variables
 CC = gcc
-CC_FLAGS = -ansi -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Wunreachable-code
+
+LIBS = -lGL -lGLU -lglut -lm 
+CC_FLAGS = -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Wunreachable-code
 
 # File names
-EXEC = generator
+GEN = generator
+ENG = engine
+
 SOURCES = $(wildcard *.c)
 OBJECTS = $(SOURCES:.c=.o)
 
-# Main target
-$(EXEC): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXEC)
+# Generator target
+$(GEN): generator.o errors.o create_models.o
+	$(CC) generator.o errors.o create_models.o -o $(GEN)
+
+# Engine target
+$(ENG): engine.o errors.o utils.o
+	$(CC) engine.o errors.o utils.o -o $(ENG) $(LIBS)
 
 # To obtain object files
 %.o: %.c
@@ -17,4 +25,4 @@ $(EXEC): $(OBJECTS)
 
 # To remove generated files
 clean:
-	rm -f $(EXEC) $(OBJECTS)
+	rm -f $(GEN) $(ENG) $(OBJECTS)

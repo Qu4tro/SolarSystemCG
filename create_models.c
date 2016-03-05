@@ -9,11 +9,11 @@ void add_point(float* vertices, float x, float y, float z){
     vertices[0] += 3;
 }
 
+/*
 void add_square(float* vertices,
                 float xA, float yA, float zA,
                 float xB, float yB, float zB,
                 float xC, float yC, float zC){
-/*
     A         B
     ///////////
     //       //
@@ -22,11 +22,10 @@ void add_square(float* vertices,
     //       //
     ///////////
     C         D
-*/
+*/ /*
 
     float xD, yD, zD;
 
-    /* xD = */ 
 
     add_point(vertices, xA, yA, zA);
     add_point(vertices, xB, yB, zB);
@@ -35,12 +34,12 @@ void add_square(float* vertices,
     add_point(vertices, xA, yA, zA);
     add_point(vertices, xD, yD, zD);
     add_point(vertices, xB, yB, zB);
-
 }
+*/
 
-float* create_plane(){
+int create_plane(float* vertices){
 
-    float* vertices = malloc(NV_PLANE * sizeof(float));
+    int nVertices = 6;
 
     add_point(vertices, 100, 0, 100);
     add_point(vertices, 100, 0, -100);
@@ -50,12 +49,13 @@ float* create_plane(){
     add_point(vertices, -100, 0, 100);
     add_point(vertices, -100, 0, -100);
 
-    return vertices;
+    return nVertices;
+    /* return vertices; */
 }
 
-float* create_box(float X, float Y, float Z){
+int create_box(float* vertices, float X, float Y, float Z){
 
-    float* vertices = malloc(NV_BOX * sizeof(float));
+    int nVertices = 6;
 
     // front-face
     add_point(vertices,  X,  Y,  Z);
@@ -111,13 +111,13 @@ float* create_box(float X, float Y, float Z){
     add_point(vertices, X, -Y,  Z);
     add_point(vertices, X,  Y,  Z);
 
-    return vertices;
+    return nVertices;
 }
 
 
-float* create_sphere(float radius, int slices, int stacks){
-    return NULL;
+int create_sphere(float* vertices, float radius, int slices, int stacks){
+    return 0;
 }
-float* create_cone(float bottom_radius, float height, int slices, int stacks){
-    return NULL;
+int create_cone(float* vertices, float bottom_radius, float height, int slices, int stacks){
+    return 0;
 }

@@ -7,38 +7,47 @@
 
 #include "errors.h"
 #include "utils.h"
+#include "xmlParser.h"
 
 #define MODEL_MAX_LINE_LENGTH 100
 
 
-
 int read_model(char* filename, float* vertices, int* n){
+
+    int i;
 
     char* line = malloc(sizeof(char) * MODEL_MAX_LINE_LENGTH);
     char** separatedLine;
 
     FILE* modelfp = fopen(filename, "r");
 
-    *n = 0;
+    if (modelfp == NULL){
+        puts("Can't open file");
+        exit(1);
+    }
+
 
     while (fgets(line, MODEL_MAX_LINE_LENGTH, modelfp)){
 
         separatedLine = split(strtok(line, "\r\n"));
         assert(nParams(separatedLine) == 3);
 
-        //validar
-        vertices[*n] = atof(separatedLine[*n % 3]);
-
-        //to debug
-        if (vertices[*n] == 0){
-            printf("Atof got zero: %s\n", separatedLine[*n % 3]);
+        // needs validation? TODO
+        for (i = 0; i < 3; ++i) {
+            vertices[*n] = atof(separatedLine[i]);
+            *n += 1;
         }
     }
+
+    /* for (i = 0; i < *n; ++i) { */
+    /*     printf("%f ", vertices[i]); */
+    /*     if (i % 3 == 2){ */
+    /*         printf("\n"); */
+    /*     } */
+    /* } */
     
     return NO_ERROR;
 }
-
-int load_scene(char* xml_scene_filename);
 
 
 void changeSize(int w, int h) {
@@ -79,44 +88,18 @@ void renderScene(void) {
 		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
 
-// put the geometric transformations here
+    // put the geometric transformations here
+    ; 
 
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glBegin(GL_TRIANGLES);
 
- 	//front
-    glVertex3f(-1.0f, 0.0f, 1.0f);
-    glVertex3f(1.0f, 0.0f, 1.0f);
-    glVertex3f(0.0f, 1.0f, 0.0f);
 
-    glVertex3f(1.0f, 0.0f, 1.0f);
-    glVertex3f(-1.0f, 0.0f, -1.0f);
-    glVertex3f(-1.0f, 0.0f, 1.0f);
-
-    //bottom right
-    glVertex3f(1.0f, 0.0f, 1.0f);
-    glVertex3f(1.0f, 0.0f, -1.0f);
-    glVertex3f(-1.0f, 0.0f, -1.0f);
-
-    //right
-    glVertex3f(1.0f, 0.0f, 1.0f);
-    glVertex3f(1.0f, 0.0f, -1.0f);
-    glVertex3f(0.0f, 1.0f, 0.0f);
-
-    //back
-    glVertex3f(1.0f, 0.0f, -1.0f);
-    glVertex3f(-1.0f, 0.0f, -1.0f);
-    glVertex3f(0.0f, 1.0f, 0.0f);
-
-    //left
-    glVertex3f(-1.0f, 0.0f, 1.0f);
-    glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(-1.0f, 0.0f, -1.0f);
 
     glEnd();
 
     // put drawing instructions here
-    glPolygonMode(GL_FRONT, GL_POINT);
 
 	// End of frame
 	glutSwapBuffers();
@@ -141,29 +124,33 @@ void renderScene(void) {
 
 int main(int argc, char **argv){
 
+    int i;
     int n = 0;
     float* vertices;
+    char** filenames;
 
     if (argc <= 1){
-        printf("Precisa de ter um ficheiro xml como argumento.");
+        printf("Usage: %s scene.xml\n", argv[0]);
         return -1;
     } 
 
-    /* load_scene(argv[1]); */
-    
-    read_model("teste.txt", vertices, &n);
+    filenames = getModels(argv[1]);
+    vertices = malloc(sizeof(float) * 5000); //TODO
 
-    int i;
+    for (i = 0; filenames[i] != NULL; ++i) {
+        read_model(filenames[i], vertices, &n);
+    }
+
+    printf("%d\n", n);
     for (i = 0; i < n; i += 3) {
-        printf("Ponto: "); 
         printf("%f %f %f\n", vertices[i],
-                             vertices[i+1],
-                             vertices[i+2]); 
+                             vertices[i + 1],
+                             vertices[i + 2]); 
     }
 
     return 0;
 
-// init GLUT and the window
+    // init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(100,100);
@@ -171,22 +158,22 @@ int main(int argc, char **argv){
     glutCreateWindow("CG@DI-UM");
 		
 
-// Required callback registry 
+    // Required callback registry 
     glutDisplayFunc(renderScene);
     glutReshapeFunc(changeSize);
 
-// put here the registration of the keyboard and menu callbacks
+    // put here the registration of the keyboard and menu callbacks
 
     //glutSpecialFunc(rotate);
 
-// put here the definition of the menu 
+    // put here the definition of the menu 
 
 
-//  OpenGL settings
+    //  OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 	
-// enter GLUT's main cycle
+    // enter GLUT's main cycle
     glutMainLoop();
 	
 	return 1;

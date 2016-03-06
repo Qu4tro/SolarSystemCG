@@ -32,4 +32,46 @@ char** split(char* string){
     return strings;
 }
 
+void print_strings(char** strings){
+    int i;
+    for (i = 0; strings[i] != NULL; ++i) {
+        printf("%s\n", strings[i]);
+        fflush(stdout);
+    }
+}
+
+char* strstrip(char* s){
+
+        size_t size;
+        char *end;
+
+        size = strlen(s);
+
+        if (!size)
+                return s;
+
+        end = s + size - 1;
+        while (end >= s && isspace(*end))
+                end--;
+        *(end + 1) = '\0';
+
+        while (*s && isspace(*s))
+                s++;
+
+        return s;
+}
+
+char* dupstr (const char* s){
+
+    char *p = malloc(strlen(s) + 1); 
+
+    if (p != NULL){
+        strcpy (p,s);
+    }
+
+    return p;
+}
+
+
+void printCharBuffer(char* b){ int i; for (i = 0; b[i] != '\0'; ++i) printf("%d ", b[i]); printf("\n");}
 

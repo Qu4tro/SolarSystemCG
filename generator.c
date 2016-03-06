@@ -27,30 +27,29 @@ int validate_args(int n_args, char* argv[]){
         return INVALID_ARGS;
     } else {
         model = argv[0];
-
         argv++;
         n_args--;
     }
 
-    if (strcmp(model, "plane") == 0 && n_args == 0){
+    if (strcmp(model, "plane") == 0 && n_args == 1){
             return NO_ERROR; 
     }
 
-    if ((strcmp(model, "box") == 0 && n_args == 6) &&
+    if ((strcmp(model, "box") == 0 && n_args == 4) &&
         is_positive_float(argv[0]) &&
         is_positive_float(argv[1]) &&
         is_positive_float(argv[2])){
             return NO_ERROR; 
     }
 
-    if ((strcmp(model, "sphere") == 0 && n_args == 6) &&
+    if ((strcmp(model, "sphere") == 0 && n_args == 4) &&
         is_positive_float(argv[0]) &&
         is_positive_int(argv[1]) &&
         is_positive_int(argv[2])){
             return NO_ERROR; 
     }
 
-    if ((strcmp(model, "cone") == 0 && n_args == 7) &&
+    if ((strcmp(model, "cone") == 0 && n_args == 5) &&
         is_positive_float(argv[0]) &&
         is_positive_float(argv[1]) &&
         is_positive_int(argv[2]) &&
@@ -89,30 +88,36 @@ int main(int argc, char* argv[]){
     int err;
 
     char* model;
-    float* vertices = malloc(sizeof(float) * 5000); //TODO
+    float* vertices = calloc(sizeof(float), 5000); //TODO
     int nVertices;
+
 
     if ((err = validate_args(--argc, ++argv))){
         printf("Invalid args!");
+        return -1;
     }
     model = argv[0];
     --argc; ++argv;
 
     if        (strcmp(model, "plane")  == 0){
         nVertices = create_plane(vertices);
+        printf("%d\n", nVertices);
 
     } else if (strcmp(model, "box")    == 0){
         nVertices = create_box(vertices, atof(argv[0]), atof(argv[1]), atof(argv[2]));
+        printf("%d\n", nVertices);
 
     } else if (strcmp(model, "sphere") == 0){
         nVertices = create_sphere(vertices, atof(argv[0]), atoi(argv[1]), atoi(argv[2]));
+        printf("%d\n", nVertices);
         
     } else if (strcmp(model, "cone")   == 0){
         nVertices = create_cone(vertices, atof(argv[0]), atof(argv[1]), atoi(argv[2]), atoi(argv[3]));
+        printf("%d\n", nVertices);
     } 
 
     assert(nVertices % 3 == 0);
-    print_vertices(vertices + 1, vertices[0]);
+    print_vertices(vertices, nVertices*3);
 
     return 0;
 }

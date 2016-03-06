@@ -1,12 +1,12 @@
 #include "create_models.h"
 
-void add_point(float* vertices, float x, float y, float z){
-    int len = vertices[0];
-    vertices[len] = x; 
-    vertices[len + 1] = y; 
-    vertices[len + 2] = z; 
+
+int add_point(float* vertices, int n, float x, float y, float z){
+    vertices[n] = x; 
+    vertices[n + 1] = y; 
+    vertices[n + 2] = z; 
     
-    vertices[0] += 3;
+    return n + 3;
 }
 
 /*
@@ -39,15 +39,17 @@ void add_square(float* vertices,
 
 int create_plane(float* vertices){
 
+    int nPoints = 0;
     int nVertices = 6;
 
-    add_point(vertices, 100, 0, 100);
-    add_point(vertices, 100, 0, -100);
-    add_point(vertices, -100, 0, -100);
 
-    add_point(vertices, 100, 0, 100);
-    add_point(vertices, -100, 0, 100);
-    add_point(vertices, -100, 0, -100);
+    nPoints = add_point(vertices, nPoints, 100, 0, 100);
+    nPoints = add_point(vertices, nPoints, 100, 0, -100);
+    nPoints = add_point(vertices, nPoints, -100, 0, -100);
+
+    nPoints = add_point(vertices, nPoints, 100, 0, 100);
+    nPoints = add_point(vertices, nPoints, -100, 0, 100);
+    nPoints = add_point(vertices, nPoints, -100, 0, -100);
 
     return nVertices;
     /* return vertices; */
@@ -55,61 +57,62 @@ int create_plane(float* vertices){
 
 int create_box(float* vertices, float X, float Y, float Z){
 
-    int nVertices = 6;
+    int nPoints = 0;
+    int nVertices = 36;
 
     // front-face
-    add_point(vertices,  X,  Y,  Z);
-    add_point(vertices, -X, -Y,  Z);
-    add_point(vertices,  X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y,  Z);
 
-    add_point(vertices,  X,  Y,  Z);
-    add_point(vertices, -X,  Y,  Z);
-    add_point(vertices, -X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y,  Z);
     
     // back-face
-    add_point(vertices,  X,  Y, -Z);
-    add_point(vertices,  X, -Y, -Z);
-    add_point(vertices, -X,  Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y, -Z);
 
-    add_point(vertices,  X,  Y, -Z);
-    add_point(vertices, -X, -Y, -Z);
-    add_point(vertices, -X,  Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y, -Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y, -Z);
 
     // top-face
-    add_point(vertices,  X,  Y,  Z);
-    add_point(vertices, -X,  Y, -Z);
-    add_point(vertices, -X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y, -Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y,  Z);
 
-    add_point(vertices,  X,  Y,  Z);
-    add_point(vertices,  X,  Y, -Z);
-    add_point(vertices, -X,  Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y, -Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y, -Z);
 
     // bottom-face
-    add_point(vertices,  X, -Y,  Z);
-    add_point(vertices, -X, -Y,  Z);
-    add_point(vertices, -X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y, -Z);
 
-    add_point(vertices,  X, -Y,  Z);
-    add_point(vertices,  X, -Y, -Z);
-    add_point(vertices, -X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y, -Z);
 
     // left-face
-    add_point(vertices, -X, -Y,  Z);
-    add_point(vertices, -X,  Y,  Z);
-    add_point(vertices, -X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y, -Z);
 
-    add_point(vertices, -X, -Y, -Z);
-    add_point(vertices, -X, -Y,  Z);
-    add_point(vertices, -X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints, -X,  Y, -Z);
 
     // right-face
-    add_point(vertices, X, -Y,  Z);
-    add_point(vertices, X,  Y,  Z);
-    add_point(vertices, X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y,  Z);
 
-    add_point(vertices, X, -Y, -Z);
-    add_point(vertices, X, -Y,  Z);
-    add_point(vertices, X,  Y,  Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y, -Z);
+    nPoints = add_point(vertices, nPoints,  X, -Y,  Z);
+    nPoints = add_point(vertices, nPoints,  X,  Y,  Z);
 
     return nVertices;
 }

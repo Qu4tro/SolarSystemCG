@@ -84,7 +84,7 @@ int main(int argc, char* argv[]){
     int err;
 
     char* model;
-    float* vertices = calloc(sizeof(float), 5000); //TODO
+    float* vertices = calloc(sizeof(float), 500000); //TODO
     int nVertices;
 
     char* filename;

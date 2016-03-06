@@ -45,18 +45,12 @@ int read_model(char* filename){
 }
 
 void draw_triangles(){
-
     int i;
-    
     for (i = 0; i < nVertices; i += 3) {
         glVertex3f(vertices[i],
                    vertices[i + 1],
                    vertices[i + 2]);
-        /* printf("%f %f %f\n", vertices[i], */
-        /*                      vertices[i + 1], */
-        /*                      vertices[i + 2]); */ 
     }
-
 }
 
 
@@ -94,7 +88,7 @@ void renderScene(void) {
 
 	// set the camera
 	glLoadIdentity();
-	gluLookAt(0.0,2.0,5.0, 
+	gluLookAt(0.0,4.0,10.0, 
 		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
 
@@ -142,7 +136,7 @@ int main(int argc, char **argv){
 
     filenames = getModels(argv[1]);
     nVertices = 0;
-    vertices = malloc(sizeof(float) * 5000); //TODO
+    vertices = malloc(sizeof(float) * 500000); //TODO
 
     for (i = 0; filenames[i] != NULL; ++i) {
         read_model(filenames[i]);
@@ -153,7 +147,7 @@ int main(int argc, char **argv){
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
-    glutCreateWindow("CG@DI-UM");
+    glutCreateWindow("Tecas");
 		
 
     // Required callback registry 

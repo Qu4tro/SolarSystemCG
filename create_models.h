@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 
 #define NV_BOX 10
 #define NV_PLANE 10

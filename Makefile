@@ -18,7 +18,7 @@ all:
 
 # Generator target
 $(GEN): generator.o errors.o create_models.o
-	$(CC) generator.o errors.o create_models.o -o $(GEN)
+	$(CC) generator.o errors.o create_models.o -o $(GEN) $(LIBS)
 
 # Engine target
 $(ENG): xmlParser.o engine.o errors.o utils.o 

@@ -11,8 +11,10 @@
 
 #define MODEL_MAX_LINE_LENGTH 100
 
+float* vertices;
+int nVertices;
 
-int read_model(char* filename, float* vertices, int* n){
+int read_model(char* filename){
 
     int i;
 
@@ -34,19 +36,27 @@ int read_model(char* filename, float* vertices, int* n){
 
         // needs validation? TODO
         for (i = 0; i < 3; ++i) {
-            vertices[*n] = atof(separatedLine[i]);
-            *n += 1;
+            vertices[nVertices] = atof(separatedLine[i]);
+            nVertices += 1;
         }
     }
 
-    /* for (i = 0; i < *n; ++i) { */
-    /*     printf("%f ", vertices[i]); */
-    /*     if (i % 3 == 2){ */
-    /*         printf("\n"); */
-    /*     } */
-    /* } */
-    
     return NO_ERROR;
+}
+
+void draw_triangles(){
+
+    int i;
+    
+    for (i = 0; i < nVertices; i += 3) {
+        glVertex3f(vertices[i],
+                   vertices[i + 1],
+                   vertices[i + 2]);
+        /* printf("%f %f %f\n", vertices[i], */
+        /*                      vertices[i + 1], */
+        /*                      vertices[i + 2]); */ 
+    }
+
 }
 
 
@@ -84,7 +94,7 @@ void renderScene(void) {
 
 	// set the camera
 	glLoadIdentity();
-	gluLookAt(0.0,5.0,-1.0, 
+	gluLookAt(0.0,2.0,5.0, 
 		      0.0,0.0,0.0,
 			  0.0f,1.0f,0.0f);
 
@@ -95,11 +105,9 @@ void renderScene(void) {
 
     glBegin(GL_TRIANGLES);
 
-
+    draw_triangles();
 
     glEnd();
-
-    // put drawing instructions here
 
 	// End of frame
 	glutSwapBuffers();
@@ -125,8 +133,6 @@ void renderScene(void) {
 int main(int argc, char **argv){
 
     int i;
-    int n = 0;
-    float* vertices;
     char** filenames;
 
     if (argc <= 1){
@@ -135,20 +141,12 @@ int main(int argc, char **argv){
     } 
 
     filenames = getModels(argv[1]);
+    nVertices = 0;
     vertices = malloc(sizeof(float) * 5000); //TODO
 
     for (i = 0; filenames[i] != NULL; ++i) {
-        read_model(filenames[i], vertices, &n);
+        read_model(filenames[i]);
     }
-
-    printf("%d\n", n);
-    for (i = 0; i < n; i += 3) {
-        printf("%f %f %f\n", vertices[i],
-                             vertices[i + 1],
-                             vertices[i + 2]); 
-    }
-
-    return 0;
 
     // init GLUT and the window
     glutInit(&argc, argv);
@@ -171,7 +169,7 @@ int main(int argc, char **argv){
 
     //  OpenGL settings
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    /* glEnable(GL_CULL_FACE); */
 	
     // enter GLUT's main cycle
     glutMainLoop();

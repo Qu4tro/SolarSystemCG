@@ -60,23 +60,19 @@ int validate_args(int n_args, char* argv[]){
     return INVALID_ARGS;
 }
 
-void print_vertices(float* vertices, int n){
+void fprint_vertices(FILE* f, float* vertices, int n){
 
     int i;
     for (i = 0; i < n; ++i) {
 
-        printf("%f", vertices[i]);  
+        fprintf(f, "%f", vertices[i]);  
 
         if (i != n - 1){
 
             if (i % 3 == 2) {
-                if (i % 9 == 8){
-                    printf("\n"); 
-                }
-                printf("\n");
-
+                fprintf(f, "\n");
             } else {
-                printf(" ");
+                fprintf(f, " ");
 
             }
         }
@@ -91,6 +87,9 @@ int main(int argc, char* argv[]){
     float* vertices = calloc(sizeof(float), 5000); //TODO
     int nVertices;
 
+    char* filename;
+    FILE* output;
+
 
     if ((err = validate_args(--argc, ++argv))){
         printf("Invalid args!");
@@ -101,23 +100,26 @@ int main(int argc, char* argv[]){
 
     if        (strcmp(model, "plane")  == 0){
         nVertices = create_plane(vertices);
-        printf("%d\n", nVertices);
+        filename = argv[0];
 
     } else if (strcmp(model, "box")    == 0){
         nVertices = create_box(vertices, atof(argv[0]), atof(argv[1]), atof(argv[2]));
-        printf("%d\n", nVertices);
+        filename = argv[3];
 
     } else if (strcmp(model, "sphere") == 0){
         nVertices = create_sphere(vertices, atof(argv[0]), atoi(argv[1]), atoi(argv[2]));
-        printf("%d\n", nVertices);
+        filename = argv[3];
         
     } else if (strcmp(model, "cone")   == 0){
         nVertices = create_cone(vertices, atof(argv[0]), atof(argv[1]), atoi(argv[2]), atoi(argv[3]));
-        printf("%d\n", nVertices);
+        filename = argv[4];
     } 
 
     assert(nVertices % 3 == 0);
-    print_vertices(vertices, nVertices*3);
+
+    output = fopen(filename, "w");
+
+    fprint_vertices(output, vertices, nVertices*3);
 
     return 0;
 }

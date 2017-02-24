@@ -6,6 +6,17 @@
 #include "errors.h"
 #include "create_models.h"
 
+void usage(){
+    fprintf(stderr, "Model generator. \n"
+                    "\n"
+                    "Usage:\n"
+                    "  generator plane <output.3d>\n"
+                    "  generator box <length> <width> <height> [<divisios>] <output.3d>\n"
+                    "  generator sphere <radius> <slices> <stacks> <output.3d>\n"
+                    "  generator cone <bottom radius> <height> <slices> <stacks> <output.3d>\n"
+           );
+}
+
 int is_positive_int(char* str){
     int n = atoi(str);
     return (n > 0);
@@ -92,7 +103,7 @@ int main(int argc, char* argv[]){
 
 
     if ((err = validate_args(--argc, ++argv))){
-        printf("Invalid args!");
+        usage();
         return -1;
     }
     model = argv[0];

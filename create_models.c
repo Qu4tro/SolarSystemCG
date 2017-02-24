@@ -89,17 +89,16 @@ int create_box(float* vertices, float X, float Y, float Z){
 
 
 int create_sphere(float* vertices, float radius, int slices, int stacks){
-
     int nPoints = 0;
     int nVertices;
 
     float alpha;
     float beta;
     
-    int i, j, c = 0;
+    int i, j, loops = 0;
 	for (i = 0; i < stacks; i++) {
 		for(j = 0; j < slices; j++) {
-            c++;
+            loops++;
 			alpha = j * (2 * M_PI) / slices;
 			beta = -M_PI/2 + i * M_PI / slices;
             nPoints = add_point(vertices, nPoints,
@@ -120,7 +119,7 @@ int create_sphere(float* vertices, float radius, int slices, int stacks){
 		}
 	}
 
-    nVertices = (6 * c);
+    nVertices = (6 * loops);
     return nVertices;
 
 

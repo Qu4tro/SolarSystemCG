@@ -43,21 +43,23 @@ int validate_args(int n_args, char* argv[]){
     }
 
     if (strcmp(model, "plane") == 0 && n_args == 1){
-            return NO_ERROR; 
+            return NO_ERROR;
     }
 
-    if ((strcmp(model, "box") == 0 && n_args == 4) &&
+    if (strcmp(model, "box") == 0 && (n_args == 4 || n_args == 5) &&
         is_positive_float(argv[0]) &&
         is_positive_float(argv[1]) &&
         is_positive_float(argv[2])){
-            return NO_ERROR; 
+      if (is_positive_int(argv[3]) || n_args == 4){
+        return NO_ERROR;
+      }
     }
 
     if ((strcmp(model, "sphere") == 0 && n_args == 4) &&
         is_positive_float(argv[0]) &&
         is_positive_int(argv[1]) &&
         is_positive_int(argv[2])){
-            return NO_ERROR; 
+            return NO_ERROR;
     }
 
     if ((strcmp(model, "cone") == 0 && n_args == 5) &&
@@ -65,7 +67,7 @@ int validate_args(int n_args, char* argv[]){
         is_positive_float(argv[1]) &&
         is_positive_int(argv[2]) &&
         is_positive_int(argv[3])){
-            return NO_ERROR; 
+            return NO_ERROR;
     }
 
     return INVALID_ARGS;
@@ -91,7 +93,7 @@ void fprint_vertices(FILE* f, float* vertices, int n){
 }
 
 int main(int argc, char* argv[]){
-    
+
     int err;
 
     char* model;
@@ -114,17 +116,22 @@ int main(int argc, char* argv[]){
         filename = argv[0];
 
     } else if (strcmp(model, "box")    == 0){
-        nVertices = create_box(vertices, atof(argv[0]), atof(argv[1]), atof(argv[2]));
+      if (argc == 4){
+        nVertices = create_box(vertices, atof(argv[0]), atof(argv[1]), atof(argv[2]), 1);
         filename = argv[3];
+      } else {
+        nVertices = create_box(vertices, atof(argv[0]), atof(argv[1]), atof(argv[2]), atoi(argv[3]));
+        filename = argv[4];
+      }
 
     } else if (strcmp(model, "sphere") == 0){
         nVertices = create_sphere(vertices, atof(argv[0]), atoi(argv[1]), atoi(argv[2]));
         filename = argv[3];
-        
+
     } else if (strcmp(model, "cone")   == 0){
         nVertices = create_cone(vertices, atof(argv[0]), atof(argv[1]), atoi(argv[2]), atoi(argv[3]));
         filename = argv[4];
-    } 
+    }
 
     assert(nVertices % 3 == 0);
 

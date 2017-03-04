@@ -97,8 +97,6 @@ int main(int argc, char* argv[]){
     int err;
 
     char* model;
-    float* vertices = calloc(sizeof(float), 500000); //TODO
-    int nVertices;
 
     char* filename;
     FILE* output;
@@ -110,34 +108,28 @@ int main(int argc, char* argv[]){
     }
     model = argv[0];
     --argc; ++argv;
-
-    if        (strcmp(model, "plane")  == 0){
-        nVertices = create_plane(vertices);
-        filename = argv[0];
-
-    } else if (strcmp(model, "box")    == 0){
-      if (argc == 4){
-        nVertices = create_box(vertices, atof(argv[0]), atof(argv[1]), atof(argv[2]), 1);
-        filename = argv[3];
-      } else {
-        nVertices = create_box(vertices, atof(argv[0]), atof(argv[1]), atof(argv[2]), atoi(argv[3]));
-        filename = argv[4];
-      }
-
-    } else if (strcmp(model, "sphere") == 0){
-        nVertices = create_sphere(vertices, atof(argv[0]), atoi(argv[1]), atoi(argv[2]));
-        filename = argv[3];
-
-    } else if (strcmp(model, "cone")   == 0){
-        nVertices = create_cone(vertices, atof(argv[0]), atof(argv[1]), atoi(argv[2]), atoi(argv[3]));
-        filename = argv[4];
-    }
-
-    assert(nVertices % 3 == 0);
+    filename = argv[--argc];
 
     output = fopen(filename, "w");
 
-    fprint_vertices(output, vertices, nVertices*3);
+    if        (strcmp(model, "plane")  == 0){
+        create_plane(output);
+        filename = argv[0];
+
+    } else if (strcmp(model, "box")    == 0){
+      if (argc == 3){
+        create_box(output, atof(argv[0]), atof(argv[1]), atof(argv[2]), 1);
+      } else {
+        create_box(output, atof(argv[0]), atof(argv[1]), atof(argv[2]), atoi(argv[3]));
+      }
+
+    } else if (strcmp(model, "sphere") == 0){
+        create_sphere(output, atof(argv[0]), atoi(argv[1]), atoi(argv[2]));
+
+    } else if (strcmp(model, "cone")   == 0){
+        create_cone(output, atof(argv[0]), atof(argv[1]), atoi(argv[2]), atoi(argv[3]));
+    }
+
 
     return 0;
 }

@@ -116,6 +116,7 @@ void renderScene(void) {
 
 void keyboard(unsigned char key_code, int x, int y){
   float one_radian = M_PI / 360;
+  int speed = 5;
 
   switch(key_code) {
     case 'o':
@@ -126,17 +127,17 @@ void keyboard(unsigned char key_code, int x, int y){
       break;
 
     case 'w':
-      cameraBeta += one_radian;
+      cameraBeta += one_radian * speed;
       break;
     case 's':
-      cameraBeta -= one_radian;
+      cameraBeta -= one_radian * speed;
       break;
 
     case 'a':
-      cameraAlpha += one_radian;
+      cameraAlpha += one_radian * speed;
       break;
     case 'd':
-      cameraAlpha -= one_radian;
+      cameraAlpha -= one_radian * speed;
       break;
   }
 

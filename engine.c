@@ -120,10 +120,10 @@ void keyboard(unsigned char key_code, int x, int y){
 
   switch(key_code) {
     case 'o':
-      cameraDistance += 0.1;
+      cameraDistance += 0.1 * speed;
       break;
     case 'p':
-      cameraDistance -= 0.1;
+      cameraDistance -= 0.1 * speed;
       break;
 
     case 'w':

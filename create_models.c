@@ -96,7 +96,7 @@ void create_box(FILE* f, float X, float Y, float Z, int divisions){
 
 void create_sphere(FILE* f, float radius, int slices, int stacks){
 
-  float sliceAngle = M_PI / slices;
+  float sliceAngle = 2*M_PI / slices;
   float stackAngle = M_PI / stacks;
 
   float alpha;
@@ -108,14 +108,14 @@ void create_sphere(FILE* f, float radius, int slices, int stacks){
   float fc = 1;
 
   int i, j;
-  for (i = 0; i < stacks; i++) {
+  for (i = 0; i < 1; i++) {
     for(j = 0; j < slices; j++) {
-      alpha = j * 2*sliceAngle;
+      alpha = j * sliceAngle;
       beta = -M_PI/2 + i * stackAngle;
 
-      v1X = fa * radius * sin(alpha + 2*sliceAngle) * cos(beta);
+      v1X = fa * radius * sin(alpha + sliceAngle) * cos(beta);
       v1Y = fb * radius * sin(beta);
-      v1Z = fc * radius * cos(alpha + 2*sliceAngle) * cos(beta);
+      v1Z = fc * radius * cos(alpha + sliceAngle) * cos(beta);
 
       v2X = fa * radius * sin(alpha) * cos(beta + stackAngle);
       v2Y = fb * radius * sin(beta + stackAngle);
@@ -130,9 +130,9 @@ void create_sphere(FILE* f, float radius, int slices, int stacks){
       add_point(f, v2X, v2Y, v2Z);
 
       add_point(f,
-                          fa * radius * sin(alpha + 2*sliceAngle) * cos(beta + stackAngle),
+                          fa * radius * sin(alpha + sliceAngle) * cos(beta + stackAngle),
                           fb * radius * sin(beta + stackAngle),
-                          fc * radius * cos(alpha + 2*sliceAngle) * cos(beta + stackAngle));
+                          fc * radius * cos(alpha + sliceAngle) * cos(beta + stackAngle));
       add_point(f, v2X, v2Y, v2Z);
       add_point(f, v1X, v1Y, v1Z);
     }

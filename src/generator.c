@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "errors.h"
 #include "create_models.h"
 
 void usage(){
@@ -31,11 +30,10 @@ int is_nonzero_float(char* str){
 }
 
 int validate_args(int n_args, char* argv[]){
-
     char* model;
 
     if (n_args < 1){
-        return INVALID_ARGS;
+        return 1;
     } else {
         model = argv[0];
         argv++;
@@ -43,7 +41,7 @@ int validate_args(int n_args, char* argv[]){
     }
 
     if (strcmp(model, "plane") == 0 && n_args == 1){
-            return NO_ERROR;
+            return 0;
     }
 
     if (strcmp(model, "box") == 0 && (n_args == 4 || n_args == 5) &&
@@ -51,7 +49,7 @@ int validate_args(int n_args, char* argv[]){
         is_positive_float(argv[1]) &&
         is_positive_float(argv[2])){
       if (is_positive_int(argv[3]) || n_args == 4){
-        return NO_ERROR;
+        return 0;
       }
     }
 
@@ -59,7 +57,7 @@ int validate_args(int n_args, char* argv[]){
         is_positive_float(argv[0]) &&
         is_positive_int(argv[1]) &&
         is_positive_int(argv[2])){
-            return NO_ERROR;
+            return 0;
     }
 
     if ((strcmp(model, "cone") == 0 && n_args == 5) &&
@@ -67,42 +65,20 @@ int validate_args(int n_args, char* argv[]){
         is_positive_float(argv[1]) &&
         is_positive_int(argv[2]) &&
         is_positive_int(argv[3])){
-            return NO_ERROR;
+            return 0;
     }
 
-    return INVALID_ARGS;
-}
-
-void fprint_vertices(FILE* f, float* vertices, int n){
-
-    int i;
-    for (i = 0; i < n; ++i) {
-
-        fprintf(f, "%f", vertices[i]);  
-
-        if (i != n - 1){
-
-            if (i % 3 == 2) {
-                fprintf(f, "\n");
-            } else {
-                fprintf(f, " ");
-
-            }
-        }
-    }
+    return 1;
 }
 
 int main(int argc, char* argv[]){
-
-    int err;
-
     char* model;
 
     char* filename;
     FILE* output;
 
 
-    if ((err = validate_args(--argc, ++argv))){
+    if (validate_args(--argc, ++argv)){
         usage();
         return -1;
     }

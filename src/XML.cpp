@@ -78,9 +78,16 @@ void parse_element(EngineState& state, std::vector<std::string> element){
     } else if (std::find(element.begin(), element.end(), "model") != element.end()){
         DrawModel* m = new DrawModel();
         value = get_after(element, std::string("file"));
-        m -> vertices = readModel(value);
+        if (value != ""){
+            m -> vertices = readModel(value);
+            state.addSceneCommand(m);
+        }
+        value = get_after(element, std::string("stl"));
+        if (value != ""){
+            m -> vertices = readSTL(value);
+            state.addSceneCommand(m);
+        }
 
-        state.addSceneCommand(m);
     }
 
 }

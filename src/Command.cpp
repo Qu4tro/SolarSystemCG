@@ -7,7 +7,6 @@ struct EnterContext : Command {
     std::string toString(){
         return "EnterContext";
     }
-
 };
 
 struct ExitContext : Command {

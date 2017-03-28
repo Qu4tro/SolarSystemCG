@@ -18,7 +18,4 @@ struct Command {
 
 };
 
-typedef std::shared_ptr<Command> pCommand;
-
-
 #endif

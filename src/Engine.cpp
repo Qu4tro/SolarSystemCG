@@ -83,6 +83,12 @@ int main(int argc, char** argv){
         printf("Usage: %s scene.xml\n", argv[0]);
         return -1;
     }
+
+    char command[256];
+    sprintf(command, "./preprocess_xml %s", argv[1]);
+    if (system(command) != 0){
+        return 1;
+    }
     FILE* scene_fp = fopen(argv[1], "r");
 
     state = EngineState();

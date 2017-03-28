@@ -1,0 +1,126 @@
+#! /usr/bin/env python
+
+import sys
+import os
+import xml.etree.ElementTree as ET
+
+def must(condition, error="Error?"):
+    if not(condition):
+        print(error)
+        sys.exit(1)
+
+def be_float(str):
+    try:
+        float(str)
+        return True
+    except:
+        return False
+
+def be_unique_values(list):
+    list = [x.tag for x in list]
+    return len(list) == len(set(list))
+
+def validate(elem):
+    def validate_scene(elem):
+        must(elem.tag == 'scene',
+             "Elemento base deve ser 'scene'")
+        must((len(ch) <= 1 for ch in elem.getchildren() if ch.tag == 'light'),
+             "Só pode haver 1 elemento 'lights' por 'scene'")
+        for ch in elem.getchildren():
+            must(ch.tag == 'group' or ch.tag == 'lights',
+              "Só podem haver 'group' numa 'scene'")
+            if ch.tag == 'lights':
+                raise NotImplementedError
+            else:
+                validate_group(ch)
+        return True
+
+    def validate_group(elem):
+        must(be_unique_values([ch for ch in elem.getchildren() if ch.tag != 'group']),
+             "Só pode haver 1 elemento 'models/translate/rotate/scale' por cada 'group'")
+        for ch in elem.getchildren():
+            if ch.tag == 'group':
+                validate_group(ch)
+            elif ch.tag == 'models':
+                validate_models(ch)
+            elif ch.tag == 'translate':
+                validate_translate(ch)
+            elif ch.tag == 'rotate':
+                validate_rotate(ch)
+            elif ch.tag == 'scale':
+                validate_scale(ch)
+            else:
+                must(False,
+                    "Elementos dentro de 'group' têm de ser um dos seguintes: 'group', 'models', 'translate', 'rotate' ou 'scale'")
+
+    def validate_models(elem):
+        def validate_model(elem):
+            must(elem.getchildren() == [],
+                 "'model' não pode ter elementos filho.")
+            must('file' in elem.attrib,
+                 "'model' tem que ter atributo 'file' para especificar o caminho para o ficheiro")
+            elem.set('file', os.path.expanduser(elem.attrib['file']))
+            must(os.path.isfile(elem.attrib['file']),
+                 f"Ficheiro {elem.attrib['file']} não foi encontrado.")
+
+        for ch in elem.getchildren():
+            must(ch.tag == "model",
+                 "Só pode haver elementos 'model' dentro de 'models'")
+            validate_model(ch)
+
+    def validate_translate(elem):
+        must(elem.getchildren() == [],
+             "'translate' não pode ter elementos filho.")
+        must('X' in elem.keys() or 'Y' in elem.keys() or 'Z' in elem.keys(),
+             "Tem que ser especificado um atributo X, Y ou Z")
+        must(all((be_float(v) for v in elem.attrib.values())),
+             "Atributos de 'translate' tem que ser floats/inteiros'")
+
+    def validate_rotate(elem):
+        must(elem.getchildren() == [],
+             "'rotate' não pode ter elementos filho.")
+        must('angle' in elem.keys(),
+             "'angle' tem que ter um rotate")
+        must('axisX' in elem.keys() or 'axisY' in elem.keys() or 'axisZ' in elem.keys(),
+             "'scale' tem que ter especificado um atributo X, Y ou Z")
+        must(all((be_float(v) for v in elem.attrib.values())),
+             "Atributos de 'rotate' tem que ser floats/inteiros'")
+
+    def validate_scale(elem):
+        must(elem.getchildren() == [],
+             "'scale' não pode ter elementos filho.")
+        must('X' in elem.keys() or 'Y' in elem.keys() or 'Z' in elem.keys(),
+             "'scale' tem que ter especificado um atributo X, Y ou Z")
+        must(all((be_float(v) for v in elem.attrib.values())),
+             "Atributos de 'scale' tem que ser floats/inteiros'")
+
+    validate_scene(elem)
+
+def transform(root):
+    def sort_group(group):
+        chs = group.getchildren()
+        groups = [ch for ch in chs if ch.tag == 'group']
+        models = [ch for ch in chs if ch.tag == 'models']
+        for m in models:
+            group.remove(m)
+            group.append(m)
+        for g in groups:
+            group.remove(g)
+            sort_group(g)
+            group.append(g)
+
+    for group in root.getchildren():
+        sort_group(group)
+
+def main():
+    xml = sys.argv[1]
+    must(os.path.isfile(xml),
+         "Ficheiro não existe.")
+    tree = ET.parse(xml)
+    root = tree.getroot()
+    transform(root)
+    validate(root)
+    tree.write(sys.argv[1])
+
+
+main()

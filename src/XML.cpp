@@ -175,20 +175,19 @@ void words(FILE* fp){
     }
 }
 
-void element(FILE* fp, EngineState& state){
+void element(FILE* fp){
     currentElement.clear();
     expect(fp, lbracket);
     words(fp);
     expect(fp, rbracket);
-    
-    parse_element(state, currentElement);
 }
 
 
 void parse(FILE* fp, EngineState& state) {
     nextsym(fp);
     while (sym == lbracket){
-        element(fp, state);
+        element(fp);
+        parse_element(state, currentElement);
     }
 }
 

@@ -50,6 +50,7 @@ void renderScene(void) {
               std::get<0>(tilt),   std::get<1>(tilt),  std::get<2>(tilt));
 
 
+    state.camera.move();
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     state.applyCommands();
     glutSwapBuffers();
@@ -59,27 +60,49 @@ void renderScene(void) {
 void keyboard(unsigned char key_code, int x, int y){
     switch(key_code) {
         case 'w':
-            state.camera.cameraStepUp(); break;
+            state.camera.up = true; break;
         case 's':
-            state.camera.cameraStepDown(); break;
+            state.camera.down = true; break;
     }
     glutPostRedisplay();
 }
-
+void upkeyboard(unsigned char key_code, int x, int y){
+    switch(key_code) {
+        case 'w':
+            state.camera.up = false; break;
+        case 's':
+            state.camera.down = false; break;
+    }
+    glutPostRedisplay();
+}
 
 void specialkeyboard(int key_code, int x, int y){
     switch(key_code) {
         case GLUT_KEY_UP:
-            state.camera.cameraStepForward(); break;
+            state.camera.fwd = true; break;
         case GLUT_KEY_DOWN:
-            state.camera.cameraStepBackward(); break;
+            state.camera.bck = true; break;
         case GLUT_KEY_LEFT:
-            state.camera.cameraStepLeft(); break;
+            state.camera.left = true; break;
         case GLUT_KEY_RIGHT:
-            state.camera.cameraStepRight(); break;
+            state.camera.right = true; break;
     }
     glutPostRedisplay();
 }
+void upspecialkeyboard(int key_code, int x, int y){
+    switch(key_code) {
+        case GLUT_KEY_UP:
+            state.camera.fwd = false; break;
+        case GLUT_KEY_DOWN:
+            state.camera.bck = false; break;
+        case GLUT_KEY_LEFT:
+            state.camera.left = false; break;
+        case GLUT_KEY_RIGHT:
+            state.camera.right = false; break;
+    }
+    glutPostRedisplay();
+}
+
 
 
 
@@ -111,8 +134,9 @@ int main(int argc, char** argv){
     glutReshapeFunc(changeSize);
 
     glutKeyboardFunc(keyboard);
+    glutKeyboardUpFunc(upkeyboard);
     glutSpecialFunc(specialkeyboard);
-
+    glutSpecialUpFunc(upspecialkeyboard);
     /* if (vbo){ */
     /*   glEnableClientState(GL_VERTEX_ARRAY); */
     /*   glGenBuffers(1, buffers); */

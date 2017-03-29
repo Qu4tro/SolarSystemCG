@@ -19,10 +19,10 @@ debug_generator: generator.o create_models.o
 	$(CC) -g generator.o create_models.o -o $(GEN) $(LIBS)
 
 # Engine target
-engine: Engine.o EngineState.o Command.o XML.o Models.o
-	$(CC) EngineState.o Command.o Engine.o XML.o Models.o -o $(ENG) $(LIBS)
+engine: Engine.o EngineState.o Command.o XML.o Models.o Camera.o
+	$(CC) EngineState.o Command.o Engine.o XML.o Models.o Camera.o -o $(ENG) $(LIBS)
 
-debug_engine: Engine.o EngineState.o Command.o XML.o Models.o
+debug_engine: Engine.o EngineState.o Command.o XML.o Models.o Camera.o
 	$(CC) -g EngineState.o Command.o Engine.o XML.o Models.o -o $(ENG) $(LIBS)
 
 # To obtain object files

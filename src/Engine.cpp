@@ -39,15 +39,15 @@ void changeSize(int w, int h) {
 
 
 void renderScene(void) {
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    float cameraX = cameraDistance * cos(cameraBeta) * sin(cameraAlpha);
-    float cameraZ = cameraDistance * cos(cameraBeta) * cos(cameraAlpha);
-    float cameraY = cameraDistance * sin(cameraBeta);
-    gluLookAt(cameraX, cameraY, cameraZ,
-            0.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f);
+
+    auto pos = state.camera.cartesianPosition();
+    auto focus = state.camera.cameraFocus;
+    auto tilt = state.camera.cameraTilt;
+    gluLookAt(std::get<0>(pos),    std::get<1>(pos),   std::get<2>(pos),
+              std::get<0>(focus),  std::get<1>(focus), std::get<2>(focus),
+              std::get<0>(tilt),   std::get<1>(tilt),  std::get<2>(tilt));
 
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -57,28 +57,33 @@ void renderScene(void) {
 
 
 void keyboard(unsigned char key_code, int x, int y){
-    float one_radian = M_PI / 360;
-    int speed = 5;
     switch(key_code) {
-        case 'o':
-            cameraDistance += 0.1 * speed; break;
-        case 'p':
-            cameraDistance -= 0.1 * speed; break;
         case 'w':
-            cameraBeta += one_radian * speed; break;
+            state.camera.cameraStepUp(); break;
         case 's':
-            cameraBeta -= one_radian * speed; break;
-        case 'a':
-            cameraAlpha += one_radian * speed; break;
-        case 'd':
-            cameraAlpha -= one_radian * speed; break;
+            state.camera.cameraStepDown(); break;
     }
     glutPostRedisplay();
 }
 
 
-int main(int argc, char** argv){
+void specialkeyboard(int key_code, int x, int y){
+    switch(key_code) {
+        case GLUT_KEY_UP:
+            state.camera.cameraStepForward(); break;
+        case GLUT_KEY_DOWN:
+            state.camera.cameraStepBackward(); break;
+        case GLUT_KEY_LEFT:
+            state.camera.cameraStepLeft(); break;
+        case GLUT_KEY_RIGHT:
+            state.camera.cameraStepRight(); break;
+    }
+    glutPostRedisplay();
+}
 
+
+
+int main(int argc, char** argv){
     if (argc <= 1){
         printf("Usage: %s scene.xml\n", argv[0]);
         return -1;
@@ -106,7 +111,7 @@ int main(int argc, char** argv){
     glutReshapeFunc(changeSize);
 
     glutKeyboardFunc(keyboard);
-    //glutSpecialFunc(rotate);
+    glutSpecialFunc(specialkeyboard);
 
     /* if (vbo){ */
     /*   glEnableClientState(GL_VERTEX_ARRAY); */

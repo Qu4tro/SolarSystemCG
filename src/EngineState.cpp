@@ -4,6 +4,7 @@ EngineState::EngineState() {
     ;
 }
 
+
 void EngineState::addSceneCommand(Command* command) {
     sceneCommands.push_back(command);
 
@@ -21,4 +22,3 @@ void EngineState::applyCommands() {
         it -> apply();
     }
 }
-

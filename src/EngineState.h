@@ -9,7 +9,10 @@
 #include <utility>
 #include <algorithm>
 #include <iterator>
+#include <tuple>
+#include <math.h>
 
+#include "Camera.h"
 #include "Command.cpp"
 
 class EngineState {
@@ -20,10 +23,11 @@ class EngineState {
     void printCommands();
     void applyCommands();
 
-
+    Camera camera;
   private:
     std::vector<Command*> sceneCommands;
     std::vector<std::vector<int>> models;
+
 };
 
 #endif

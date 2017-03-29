@@ -1,3 +1,6 @@
+#ifndef MODELS_H
+#define MODELS_H
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -7,3 +10,5 @@
 
 std::vector<float> readModel(std::string filename);
 std::vector<float> readSTL(std::string filename);
+
+#endif

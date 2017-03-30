@@ -9,25 +9,20 @@
 #include <tuple>
 #include <math.h>
 
-#define RADIAN_UNIT (M_PI / 360)
 
-class Camera {
-  public:
-    Camera();
+std::tuple<float, float, float> cartesianToSpheric(std::tuple<float, float, float> coordinates, std::tuple<float, float, float> center);
+std::tuple<float, float, float> sphericToCartesian(std::tuple<float, float, float> coordinates, std::tuple<float, float, float> center);
 
-    void move();
+struct Camera {
+    virtual void move() = 0;
+    virtual ~Camera() { }
 
-    std::tuple<float, float, float> cartesianPosition();
+    virtual std::tuple<float, float, float> position() = 0;
+    virtual std::tuple<float, float, float> focus() = 0;
+    virtual std::tuple<float, float, float> tilt() = 0;
 
-    std::tuple<float, float, float> cameraFocus;
-    std::tuple<float, float, float> cameraTilt;
-
-    bool up, down, fwd, bck, left, right;
-  private:
-
-    std::tuple<float, float, float> cameraPosition;
-    float cameraSpeed;
-
+    virtual void specialkey(int key, bool pressed) = 0;
+    virtual void normalkey(int key, bool pressed) = 0;
 };
 
 #endif

@@ -13,6 +13,7 @@
 #include <math.h>
 
 #include "Camera.h"
+#include "OrbitalCamera.h"
 #include "Command.cpp"
 
 class EngineState {
@@ -23,7 +24,7 @@ class EngineState {
     void printCommands();
     void applyCommands();
 
-    Camera camera;
+    Camera* camera;
   private:
     std::vector<Command*> sceneCommands;
     std::vector<std::vector<int>> models;

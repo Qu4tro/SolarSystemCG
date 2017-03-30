@@ -1,7 +1,7 @@
 #include "EngineState.h"
 
 EngineState::EngineState() {
-    ;
+    camera = new OrbitalCamera();
 }
 
 

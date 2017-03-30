@@ -1,14 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera() {
-    up = down = fwd = bck = left = right = false;
-    cameraSpeed     = 2.5;
-    cameraPosition  = std::make_tuple(50, 1, 0);
-    cameraFocus     = std::make_tuple(0, 0, 0);
-    cameraTilt      = std::make_tuple(0, 1, 0);
-}
-
-auto sphericToCartesian(auto coordinates, auto center){
+std::tuple<float, float, float> sphericToCartesian(std::tuple<float, float, float> coordinates, std::tuple<float, float, float> center){
     float rad = std::get<0>(coordinates);
     float lat = std::get<1>(coordinates);
     float lon = std::get<2>(coordinates);
@@ -20,7 +12,7 @@ auto sphericToCartesian(auto coordinates, auto center){
     return std::make_tuple(X, Y, Z);
 }
 
-auto cartesianToSpheric(auto coordinates, auto center){
+std::tuple<float, float, float> cartesianToSpheric(std::tuple<float, float, float> coordinates, std::tuple<float, float, float> center){
     float X = std::get<0>(coordinates);
     float Y = std::get<1>(coordinates);
     float Z = std::get<2>(coordinates);
@@ -36,36 +28,4 @@ auto cartesianToSpheric(auto coordinates, auto center){
     return std::make_tuple(rad, lat, lon);
 }
 
-std::tuple<float, float, float> Camera::cartesianPosition(){
-    return sphericToCartesian(cameraPosition, cameraFocus);
-}
 
-void Camera::move(){
-    if (up){
-        std::get<1>(cameraPosition) -= cameraSpeed * RADIAN_UNIT;
-        if (std::get<1>(cameraPosition) <= 0){
-            std::get<1>(cameraPosition) = RADIAN_UNIT;
-        }
-    }
-    if (down){
-        std::get<1>(cameraPosition) += cameraSpeed * RADIAN_UNIT;
-        if (std::get<1>(cameraPosition) >= M_PI) {
-            std::get<1>(cameraPosition) = M_PI - RADIAN_UNIT;
-        }
-    }
-    if (fwd){
-        std::get<0>(cameraPosition) -= cameraSpeed * 0.1;
-        if (std::get<0>(cameraPosition) < 0) {
-            std::get<0>(cameraPosition) = 0.1;
-        }
-    }
-    if (bck){
-        std::get<0>(cameraPosition) += cameraSpeed * 0.1;
-    }
-    if (left){
-        std::get<2>(cameraPosition) += cameraSpeed * RADIAN_UNIT;
-    }
-    if (right){
-        std::get<2>(cameraPosition) -= cameraSpeed * RADIAN_UNIT;
-    }
-}

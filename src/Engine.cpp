@@ -39,10 +39,9 @@ void renderScene(void) {
     auto pos = state.camera -> position();
     auto focus = state.camera -> focus();
     auto tilt = state.camera -> tilt();
-    gluLookAt(std::get<0>(pos),    std::get<1>(pos),   std::get<2>(pos),
-              std::get<0>(focus),  std::get<1>(focus), std::get<2>(focus),
-              std::get<0>(tilt),   std::get<1>(tilt),  std::get<2>(tilt));
-
+    gluLookAt(  pos.x,   pos.y,   pos.z,
+              focus.x, focus.y, focus.z,
+               tilt.x,  tilt.y,  tilt.z);
 
     state.camera -> move();
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -53,65 +52,23 @@ void renderScene(void) {
 
 void keyboard(unsigned char key_code, int x, int y){
     state.camera -> normalkey(key_code, true);
-    /* switch(key_code) { */
-    /*     case 'w': */
-    /*         state.camera -> up(true); break; */
-    /*         ; */
-    /*     case 's': */
-    /*         state.camera -> down(true); break; */
-    /* } */
     glutPostRedisplay();
 }
 void upkeyboard(unsigned char key_code, int x, int y){
     state.camera -> normalkey(key_code, false);
-    /* switch(key_code) { */
-    /*     case 'w': */
-    /*         state.camera -> up(false); break; */
-    /*     case 's': */
-    /*         state.camera -> down(false); break; */
-    /* } */
     glutPostRedisplay();
 }
 void specialkeyboard(int key_code, int x, int y){
     state.camera -> specialkey(key_code, true);
-    /* switch(key_code) { */
-    /*     case GLUT_KEY_UP: */
-    /*         state.camera -> fwd(true); break; */
-    /*     case GLUT_KEY_DOWN: */
-    /*         state.camera -> bck(true); break; */
-    /*     case GLUT_KEY_LEFT: */
-    /*         state.camera -> left(true); break; */
-    /*     case GLUT_KEY_RIGHT: */
-    /*         state.camera -> right(true); break; */
-    /* } */
     glutPostRedisplay();
 }
 void upspecialkeyboard(int key_code, int x, int y){
     state.camera -> specialkey(key_code, false);
-    /* switch(key_code) { */
-    /*     case GLUT_KEY_UP: */
-    /*         state.camera -> fwd(false); break; */
-    /*     case GLUT_KEY_DOWN: */
-    /*         state.camera -> bck(false); break; */
-    /*     case GLUT_KEY_LEFT: */
-    /*         state.camera -> left(false); break; */
-    /*     case GLUT_KEY_RIGHT: */
-    /*         state.camera -> right(false); break; */
-    /* } */
     glutPostRedisplay();
 }
 
 
 int main(int argc, char** argv){
-
-    /* for(unsigned char i = 1; i != 0; i++){ */
-    /*     printf("%d ", i); */
-    /* } */
-    /* std::cout << GLUT_KEY_F1 << " " << GLUT_KEY_F2 << " " << GLUT_KEY_F3 << " " << GLUT_KEY_F4 << " " << GLUT_KEY_F5 << " " << GLUT_KEY_F6 << " " << GLUT_KEY_F7 << " " << GLUT_KEY_F8 << " " << GLUT_KEY_F9 << " " << GLUT_KEY_F10 << " " << GLUT_KEY_F11 << " " << GLUT_KEY_F12 << " " << GLUT_KEY_LEFT << " " << GLUT_KEY_UP << " " << GLUT_KEY_RIGHT << " " << GLUT_KEY_DOWN << " " << GLUT_KEY_PAGE_UP << " " << GLUT_KEY_PAGE_DOWN << " " << GLUT_KEY_HOME << " " << GLUT_KEY_END << " " << GLUT_KEY_INSERT; */
-
-    /* std::cout << GLUT_KEY_LEFT << " " << GLUT_KEY_UP << " " << GLUT_KEY_RIGHT << " " << GLUT_KEY_DOWN << " " << GLUT_KEY_PAGE_UP << " " << GLUT_KEY_PAGE_DOWN << " " << GLUT_KEY_HOME << " " << GLUT_KEY_END << " " << GLUT_KEY_INSERT; */
-
-    /* return 1; */
 
     if (argc <= 1){
         printf("Usage: %s scene.xml\n", argv[0]);
@@ -143,6 +100,7 @@ int main(int argc, char** argv){
     glutKeyboardUpFunc(upkeyboard);
     glutSpecialFunc(specialkeyboard);
     glutSpecialUpFunc(upspecialkeyboard);
+
     /* if (vbo){ */
     /*   glEnableClientState(GL_VERTEX_ARRAY); */
     /*   glGenBuffers(1, buffers); */

@@ -14,6 +14,7 @@
 
 #include "Camera.h"
 #include "OrbitalCamera.h"
+#include "FPSCamera.h"
 #include "Command.cpp"
 
 class EngineState {

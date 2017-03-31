@@ -5,7 +5,6 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 
-
 #include <memory>
 #include <sstream>
 #include <string>

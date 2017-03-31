@@ -23,8 +23,8 @@
 *.dylib
 
 # Executables
-generator
-engine
+Generator
+Engine
 *.exe
 *.out
 *.app

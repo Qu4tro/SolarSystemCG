@@ -19,7 +19,9 @@ void OrbitalCamera::normalkey(unsigned char key, bool pressed){
 }
 
 fTriple OrbitalCamera::position(){
-    return sphericToCartesian(cameraPosition, cameraFocus);
+    fTriple t = fTriple(cameraPosition);
+    t.sphericToCartesian(cameraFocus);
+    return t;
 }
 
 fTriple OrbitalCamera::focus(){
@@ -32,31 +34,31 @@ fTriple OrbitalCamera::tilt(){
 
 void OrbitalCamera::move(){
     if (specialKeys[UP_GLUT]){
-        cameraPosition.fst -= cameraSpeed * 0.1;
-        if (cameraPosition.fst < 0) {
-            cameraPosition.fst = 0.1;
+        cameraPosition.x -= cameraSpeed * 0.1;
+        if (cameraPosition.x < 0) {
+            cameraPosition.x = 0.1;
         }
     }
     if (specialKeys[DOWN_GLUT]){
-        cameraPosition.fst += cameraSpeed * 0.1;
+        cameraPosition.x += cameraSpeed * 0.1;
     }
 
     if (normalKeys['w']){
-        cameraPosition.snd -= cameraSpeed * RADIAN_UNIT;
-        if (cameraPosition.snd <= 0){
-            cameraPosition.snd = RADIAN_UNIT;
+        cameraPosition.y -= cameraSpeed * RADIAN_UNIT;
+        if (cameraPosition.y <= 0){
+            cameraPosition.y = RADIAN_UNIT;
         }
     }
     if (normalKeys['s']){
-        cameraPosition.snd += cameraSpeed * RADIAN_UNIT;
-        if (cameraPosition.snd >= M_PI) {
-            cameraPosition.snd = M_PI - RADIAN_UNIT;
+        cameraPosition.y += cameraSpeed * RADIAN_UNIT;
+        if (cameraPosition.y >= M_PI) {
+            cameraPosition.y = M_PI - RADIAN_UNIT;
         }
     }
     if (normalKeys['a']){
-        cameraPosition.trd += cameraSpeed * RADIAN_UNIT;
+        cameraPosition.z += cameraSpeed * RADIAN_UNIT;
     }
     if (normalKeys['d']){
-        cameraPosition.trd -= cameraSpeed * RADIAN_UNIT;
+        cameraPosition.z -= cameraSpeed * RADIAN_UNIT;
     }
 }

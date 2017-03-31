@@ -9,8 +9,6 @@ std::vector<std::string> split(std::string const &input) {
 }
 
 std::vector<float> readSTL(std::string filename){
-    int i;
-
     std::vector<float> vertices;
 
     std::ifstream ifile(filename);
@@ -31,8 +29,6 @@ std::vector<float> readSTL(std::string filename){
 
 
 std::vector<float> readModel(std::string filename){
-    int i;
-
     std::vector<float> vertices;
 
     std::ifstream ifile(filename);

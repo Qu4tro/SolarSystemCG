@@ -12,7 +12,7 @@ std::string get_after(std::vector<std::string> xs, std::string x){
     if (it == xs.end()){
         return "";
     } else {
-        auto index = std::distance(xs.begin(), it);
+        unsigned index = std::distance(xs.begin(), it);
         if (index + 1 >= xs.size()){
             return "";
         } else {
@@ -24,7 +24,6 @@ std::string get_after(std::vector<std::string> xs, std::string x){
 void parse_element(EngineState& state, std::vector<std::string> element){
 
     std::string value;
-    float val;
 
     if (std::find(element.begin(), element.end(), "group") != element.end()){
         if (std::find(element.begin(), element.end(), "/") != element.end()){

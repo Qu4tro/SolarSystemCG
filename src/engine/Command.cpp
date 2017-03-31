@@ -25,7 +25,7 @@ struct DrawModel : Command {
     void apply(){
         glBegin(GL_TRIANGLES);
 
-        for(int i = 0; i < vertices.size(); i += 3){
+        for(unsigned i = 0; i < vertices.size(); i += 3){
             glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
         }
 

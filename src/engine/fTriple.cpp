@@ -40,7 +40,7 @@ void fTriple::vector_cross(fTriple t1){
 void fTriple::vector_normalize(){
     float len = sqrt(x*x + y*y + z*z);
      
-    if(len == 0){
+    if(len <= 0.0001){
         x = 0;
         y = 0;
         z = 0;

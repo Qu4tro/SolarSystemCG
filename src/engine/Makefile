@@ -7,13 +7,13 @@ CC_FLAGS = -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Wunreachable-co
 all: Engine.o EngineState.o Command.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o 
 	$(CC) EngineState.o Command.o Engine.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o -o Engine $(LIBS)
 
-# debug_engine: Engine.o EngineState.o Command.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o
-# 	$(CC) -g EngineState.o Command.o Engine.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o -o $(ENG) $(LIBS)
+# debug: Engine.o EngineState.o Command.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o
+# 	$(CC) -g EngineState.o Command.o Engine.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o -o Engine) $(LIBS)
 
 # To obtain object files
-%.o: %.cpp %.c
+%.o: %.cpp
 	$(CC) -c $(CC_FLAGS) $< -o $@
 
 # To remove generated files
 clean:
-	rm -f $(GEN) $(ENG) *.o
+	rm -f Engine *.o

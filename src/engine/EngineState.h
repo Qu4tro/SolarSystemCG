@@ -28,8 +28,6 @@ class EngineState {
     Camera* camera;
   private:
     std::vector<Command*> sceneCommands;
-    std::vector<std::vector<int>> models;
-
 };
 
 #endif

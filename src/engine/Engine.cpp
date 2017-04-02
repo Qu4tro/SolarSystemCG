@@ -36,9 +36,9 @@ void renderScene(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    auto pos = state.camera -> position();
+    auto pos = state.camera   -> position();
     auto focus = state.camera -> focus();
-    auto tilt = state.camera -> tilt();
+    auto tilt = state.camera  -> tilt();
     gluLookAt(  pos.x,   pos.y,   pos.z,
               focus.x, focus.y, focus.z,
                tilt.x,  tilt.y,  tilt.z);

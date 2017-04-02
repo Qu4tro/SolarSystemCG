@@ -4,10 +4,12 @@ import sys
 import os
 import xml.etree.ElementTree as ET
 
+
 def must(condition, error="Error?"):
     if not(condition):
         print(error)
         sys.exit(1)
+
 
 def be_float(str):
     try:
@@ -16,9 +18,11 @@ def be_float(str):
     except:
         return False
 
+
 def be_unique_values(list):
     list = [x.tag for x in list]
     return len(list) == len(set(list))
+
 
 def validate(elem):
     def validate_scene(elem):
@@ -28,7 +32,7 @@ def validate(elem):
              "Só pode haver 1 elemento 'lights' por 'scene'")
         for ch in elem.getchildren():
             must(ch.tag == 'group' or ch.tag == 'lights',
-              "Só podem haver 'group' numa 'scene'")
+                 "Só podem haver 'group' numa 'scene'")
             if ch.tag == 'lights':
                 raise NotImplementedError
             else:
@@ -36,7 +40,8 @@ def validate(elem):
         return True
 
     def validate_group(elem):
-        must(be_unique_values([ch for ch in elem.getchildren() if ch.tag != 'group']),
+        must(be_unique_values([ch for ch in elem.getchildren()
+                               if ch.tag != 'group']),
              "Só pode haver 1 elemento 'models/translate/rotate/scale' por cada 'group'")
         for ch in elem.getchildren():
             if ch.tag == 'group':
@@ -57,11 +62,16 @@ def validate(elem):
         def validate_model(elem):
             must(elem.getchildren() == [],
                  "'model' não pode ter elementos filho.")
-            must('file' in elem.attrib,
+            must('file' in elem.attrib or 'stl' in elem.attrib,
                  "'model' tem que ter atributo 'file' para especificar o caminho para o ficheiro")
-            elem.set('file', os.path.expanduser(elem.attrib['file']))
-            must(os.path.isfile(elem.attrib['file']),
-                 f"Ficheiro {elem.attrib['file']} não foi encontrado.")
+            if 'file' in elem.attrib:
+                elem.set('file', os.path.expanduser(elem.attrib['file']))
+                must(os.path.isfile(elem.attrib['file']),
+                     f"Ficheiro {elem.attrib['file']} não foi encontrado.")
+            else:
+                elem.set('stl', os.path.expanduser(elem.attrib['stl']))
+                must(os.path.isfile(elem.attrib['stl']),
+                     f"Ficheiro {elem.attrib['stl']} não foi encontrado.")
 
         for ch in elem.getchildren():
             must(ch.tag == "model",

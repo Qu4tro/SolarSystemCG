@@ -1,0 +1,94 @@
+<scene>
+	<group>
+			
+			<group>
+				<scale X="1.0" Y="1.0" Z="1.0" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+			</group>
+
+			
+			<group>
+				<translate X="10" />
+				<scale X="0.1" Y="0.1" Z="0.1" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+			</group>
+
+			
+			<group>
+				<translate X="30" />
+				<scale X="0.12" Y="0.12" Z="0.12" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+			</group>
+
+			
+			<group>
+				<translate X="45" />
+				<scale X="0.10" Y="0.13" Z="0.13" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+
+				
+					<group>
+						<translate X="1" Y="1" Z="1" />
+						<scale X="0.3" Y="0.3" Z="0.3" />
+						<models>
+							<model file="../../models/sphere.3d" />
+						</models>
+					</group>
+					
+			</group>
+
+			
+			<group>
+				<translate X="70" />
+				<scale X="0.1" Y="0.1" Z="0.1" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+			</group>
+
+			
+			<group>
+				<translate X="80" />
+				<scale X="0.35" Y="0.35" Z="0.35" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+			</group>
+
+			
+			<group>
+				<translate X="100" />
+				<scale X="0.3" Y="0.3" Z="0.3" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+			</group>
+
+			
+			<group>
+				<translate X="120" />
+				<scale X="0.2" Y="0.2" Z="0.2" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+			</group>
+
+			
+			<group>
+				<translate X="140" />
+				<scale X="0.22" Y="0.22" Z="0.22" />
+				<models>
+					<model file="../../models/sphere.3d" />
+				</models>
+			</group>
+
+		</group>
+</scene>

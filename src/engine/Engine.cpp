@@ -70,20 +70,31 @@ void upspecialkeyboard(int key_code, int x, int y){
 
 int main(int argc, char** argv){
 
+    bool drawModel = false;
+    bool validate = true;
+
     if (argc <= 1){
         printf("Usage: %s scene.xml\n", argv[0]);
         return -1;
     }
 
-    char command[256];
-    sprintf(command, "./preprocess_xml %s", argv[1]);
-    if (system(command) != 0){
-        return 1;
+    if (validate){
+        char command[256];
+        sprintf(command, "./preprocess_xml %s", argv[1]);
+        if (system(command) != 0){
+            return 1;
+        }
     }
-    FILE* scene_fp = fopen(argv[1], "r");
 
     state = EngineState();
-    parse(scene_fp, state);
+    if (drawModel){
+        FILE* model_fp = fopen(argv[2], "r");
+        /* state.addSceneCommand(Command* command); */
+    
+    } else {
+        FILE* scene_fp = fopen(argv[1], "r");
+        parse(scene_fp, state);
+    }
     
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);

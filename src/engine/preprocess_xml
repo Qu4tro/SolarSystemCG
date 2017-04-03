@@ -54,6 +54,8 @@ def validate(elem):
                 validate_rotate(ch)
             elif ch.tag == 'scale':
                 validate_scale(ch)
+            elif ch.tag == 'color':
+                validate_color(ch)
             else:
                 must(False,
                     "Elementos dentro de 'group' têm de ser um dos seguintes: 'group', 'models', 'translate', 'rotate' ou 'scale'")
@@ -74,9 +76,12 @@ def validate(elem):
                      f"Ficheiro {elem.attrib['stl']} não foi encontrado.")
 
         for ch in elem.getchildren():
-            must(ch.tag == "model",
-                 "Só pode haver elementos 'model' dentro de 'models'")
-            validate_model(ch)
+            must(ch.tag == "model" or ch.tag == 'color',
+                 "Só pode haver elementos 'model' ou 'color' dentro de 'models'")
+            if (ch.tag == "model"):
+                validate_model(ch)
+            elif (ch.tag == "color"):
+                validate_color(ch)
 
     def validate_translate(elem):
         must(elem.getchildren() == [],
@@ -104,7 +109,16 @@ def validate(elem):
         must(all((be_float(v) for v in elem.attrib.values())),
              "Atributos de 'scale' tem que ser floats/inteiros'")
 
+    def validate_color(elem):
+        must(elem.getchildren() == [],
+             "'color' não pode ter elementos filho.")
+        must('R' in elem.keys() or 'G' in elem.keys() or 'B' in elem.keys(),
+             "'color' tem que ter especificado um atributo R, G ou B")
+        must(all((be_float(v) for v in elem.attrib.values())),
+             "Atributos de 'color' tem que ser floats/inteiros'")
+
     validate_scene(elem)
+
 
 def transform(root):
     def sort_group(group):
@@ -121,6 +135,7 @@ def transform(root):
 
     for group in root.getchildren():
         sort_group(group)
+
 
 def main():
     xml = sys.argv[1]

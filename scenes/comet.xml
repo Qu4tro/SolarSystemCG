@@ -1,7 +1,8 @@
 <scene>
     <group>
         <models>
-            <model stl="../../models/comet.stl" />
+            <color B="0" G="0" R="1" />
+            <model file="../../models/comet.stl" />
         </models>
     </group>
 </scene>

@@ -9,6 +9,7 @@ struct EnterContext : Command {
     }
 };
 
+
 struct ExitContext : Command {
     void apply(){
         glPopMatrix();
@@ -41,8 +42,37 @@ struct DrawModel : Command {
     }
 };
 
+struct Color : Command {
+    float R, G, B;
+    Color(float r, float g, float b){
+        R = r;
+        G = g;
+        B = b;
+    }
+
+    void apply(){
+        glColor3f(R, G, B);
+    }
+    std::string toString(){
+        std::ostringstream stringStream;
+        stringStream << "Color: ";
+        stringStream << "R=" << R << " ";
+        stringStream << "G=" << G << " ";
+        stringStream << "B=" << B << " ";
+
+        return stringStream.str();
+    }
+};
+
+
+
 struct Translate : Command {
-    float X, Y, Z = 0;
+    float X, Y, Z;
+    Translate(float x, float y, float z){
+        X = x;
+        Y = y;
+        Z = z;
+    }
 
     void apply(){
         glTranslatef(X, Y, Z);
@@ -59,7 +89,13 @@ struct Translate : Command {
 };
 
 struct Rotate : Command {
-    float angle, axisX, axisY, axisZ = 0;
+    float angle, axisX, axisY, axisZ;
+    Rotate(float ang, float x, float y, float z){
+        angle = ang;
+        axisX = x;
+        axisY = y;
+        axisZ = z;
+    }
 
     void apply(){
         glRotatef(angle, axisX, axisY, axisZ);
@@ -77,7 +113,12 @@ struct Rotate : Command {
 };
 
 struct Scale : Command {
-    float X, Y, Z = 1;
+    float X, Y, Z;
+    Scale(float x, float y, float z){
+        X = x;
+        Y = y;
+        Z = z;
+    }
 
     void apply(){
         glScalef(X, Y, Z);

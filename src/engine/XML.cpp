@@ -7,17 +7,34 @@ char peek = 0;
 std::string current = "";
 std::vector<std::string> currentElement;
 
-std::string get_after(std::vector<std::string> xs, std::string x){
-    auto it = find(xs.begin(), xs.end(), x);
-    if (it == xs.end()){
+std::string get_raw(std::vector<std::string> element, std::string key){
+    auto it = find(element.begin(), element.end(), key);
+    if (it == element.end()){
         return "";
     } else {
-        unsigned index = std::distance(xs.begin(), it);
-        if (index + 1 >= xs.size()){
+        unsigned index = std::distance(element.begin(), it);
+        if (index + 1 >= element.size()){
             return "";
         } else {
-            return xs.at(index + 1);
+            return element.at(index + 1);
         }
+    }
+}
+
+float get_float(std::vector<std::string> element, std::string key, float defaultV){
+    std::string value = get_raw(element, key);
+    if (value == ""){
+        return defaultV; 
+    } else {
+        return stof(value);
+    }
+}
+
+bool hasEnding (std::string const &fullString, std::string const &ending) {
+    if (fullString.length() >= ending.length()) {
+        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+    } else {
+        return false;
     }
 }
 
@@ -33,62 +50,42 @@ void parse_element(EngineState& state, std::vector<std::string> element){
         }
 
     } else if (std::find(element.begin(), element.end(), "translate") != element.end()){
-        Translate* t = new Translate();
-        value = get_after(element, std::string("X"));
-        t->X = (value != "") ? stof(value) : 0;
-
-        value = get_after(element, std::string("Y"));
-        t->Y = (value != "") ? stof(value) : 0;
-
-        value = get_after(element, std::string("Z"));
-        t->Z = (value != "") ? stof(value) : 0;
-        state.addSceneCommand(t);
-
+        state.addSceneCommand(new Translate(get_float(element, "X", 1),
+                                            get_float(element, "Y", 1),
+                                            get_float(element, "Z", 1)
+                             ));
+        
     } else if (std::find(element.begin(), element.end(), "rotate") != element.end()){
-        Rotate* r = new Rotate();
-
-        value = get_after(element, std::string("angle"));
-        r->angle = (value != "") ? stof(value) : 0;
-
-        value = get_after(element, std::string("axisX"));
-        r->axisX = (value != "") ? stof(value) : 0;
-
-        value = get_after(element, std::string("axisY"));
-        r->axisY = (value != "") ? stof(value) : 0;
-
-        value = get_after(element, std::string("axisZ"));
-        r->axisZ = (value != "") ? stof(value) : 0;
-        state.addSceneCommand(r);
+        state.addSceneCommand(new Rotate(get_float(element, "angle", 0),
+                                         get_float(element, "axisX", 0),
+                                         get_float(element, "axisY", 0),
+                                         get_float(element, "axisZ", 0)
+                             ));
 
     } else if (std::find(element.begin(), element.end(), "scale") != element.end()){ 
-        Scale* s = new Scale();
-
-        value = get_after(element, std::string("X"));
-        s->X = (value != "") ? stof(value) : 1;
-
-        value = get_after(element, std::string("Y"));
-        s->Y = (value != "") ? stof(value) : 1;
-
-        value = get_after(element, std::string("Z"));
-        s->Z = (value != "") ? stof(value) : 1;
-
-        state.addSceneCommand(s);
-
+        state.addSceneCommand(new Scale(get_float(element, "X", 1),
+                                        get_float(element, "Y", 1),
+                                        get_float(element, "Z", 1)
+                                        ));
+        
+    } else if (std::find(element.begin(), element.end(), "color") != element.end()){ 
+        state.addSceneCommand(new Color(get_float(element, "R", 1),
+                                        get_float(element, "G", 1),
+                                        get_float(element, "B", 1)
+                                        ));
+        
     } else if (std::find(element.begin(), element.end(), "model") != element.end()){
         DrawModel* m = new DrawModel();
-        value = get_after(element, std::string("file"));
+        value = get_raw(element, std::string("file"));
         if (value != ""){
-            m -> vertices = readModel(value);
+            if (hasEnding(value, ".stl")){
+                m -> vertices = readSTL(value);
+            } else {
+                m -> vertices = readModel(value);
+            }
             state.addSceneCommand(m);
         }
-        value = get_after(element, std::string("stl"));
-        if (value != ""){
-            m -> vertices = readSTL(value);
-            state.addSceneCommand(m);
-        }
-
     }
-
 }
 
 void error(std::string err){

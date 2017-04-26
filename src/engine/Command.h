@@ -5,10 +5,13 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 
+#include <math.h>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include <fTriple.h>
 
 struct Command {
     virtual void apply() = 0;

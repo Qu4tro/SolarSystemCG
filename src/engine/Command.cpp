@@ -7,9 +7,8 @@ struct EnterContext : Command {
     std::string toString(){
         return "EnterContext";
     }
-    
-};
 
+};
 
 struct ExitContext : Command {
     void apply(){
@@ -20,31 +19,96 @@ struct ExitContext : Command {
     }
 };
 
-struct DrawModel : Command {
-    int index;
-    std::vector<float> vertices;
+class DrawModelVBO : public Command {
 
-    void apply(){
-        glBegin(GL_TRIANGLES);
+    private:
+        int nVertices;
+        std::string model_path;
+        GLuint geometry_array;
+        GLuint indice_array;
 
-        for(unsigned i = 0; i < vertices.size(); i += 3){
-            glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
+        void loadVertices(){
+            std::vector<float> vertices = readModel(model_path);
+            nVertices = vertices.size();
+            glGenBuffers(1, &geometry_array);
+            glBindBuffer(GL_ARRAY_BUFFER, geometry_array);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVertices, &vertices[0], GL_STATIC_DRAW);
         }
 
-        glEnd();
-    }
-    std::string toString(){
-        std::ostringstream stringStream;
-        stringStream << "DrawModel: ";
-        stringStream << "nVertices=";
-        stringStream << vertices.size();
+    public:
+        DrawModelVBO(std::string path){
+            geometry_array = 0;
+            indice_array = 0;
+            model_path = path;
+            loadVertices();
+        }
 
-        return stringStream.str();
-    }
+        void apply(){
+            glBindBuffer(GL_ARRAY_BUFFER, geometry_array);
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glVertexPointer(3, GL_FLOAT, 0, 0);
+            glDrawArrays(GL_TRIANGLES, 0, nVertices);
+
+            /* glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indice_array); */
+
+            /* glEnableClientState(GL_TEXTURE_COORD_ARRAY); */
+            /* glEnableClientState(GL_NORMAL_ARRAY); */
+
+            /* glTexCoordPointer(3, GL_FLOAT, sizeof(GLfloat)*8, (float*)(sizeof(GLfloat)*5)); */
+            /* glNormalPointer(GL_FLOAT, sizeof(GLfloat)*8, (float*)(sizeof(GLfloat)*3)); */
+
+            /* glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL); */
+
+            glDisableClientState(GL_VERTEX_ARRAY);
+            /* glDisableClientState(GL_NORMAL_ARRAY); */
+            /* glDisableClientState(GL_TEXTURE_COORD_ARRAY); */
+
+        }
+
+        std::string toString(){
+            std::ostringstream stringStream;
+            stringStream << "DrawModelVBO: ";
+            stringStream << "nVertices=";
+            stringStream << nVertices;
+
+            return stringStream.str();
+        }
+};
+
+class DrawModel : public Command {
+
+    private:
+        std::vector<float> vertices;
+
+    public:
+        std::string model_path;
+
+        DrawModel(std::string path){
+            model_path = path;
+            vertices = readModel(model_path);
+        }
+
+        void apply(){
+            glBegin(GL_TRIANGLES);
+            for(unsigned i = 0; i < vertices.size(); i += 3){
+                glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
+            }
+            glEnd();
+        }
+
+        std::string toString(){
+            std::ostringstream stringStream;
+            stringStream << "DrawModel: ";
+            stringStream << "nVertices=";
+            stringStream << vertices.size();
+
+            return stringStream.str();
+        }
 };
 
 struct Color : Command {
     float R, G, B;
+
     Color(float r, float g, float b){
         R = r;
         G = g;
@@ -54,6 +118,7 @@ struct Color : Command {
     void apply(){
         glColor3f(R, G, B);
     }
+
     std::string toString(){
         std::ostringstream stringStream;
         stringStream << "Color: ";
@@ -64,8 +129,6 @@ struct Color : Command {
         return stringStream.str();
     }
 };
-
-
 
 struct Translate : Command {
     float X, Y, Z;
@@ -78,6 +141,8 @@ struct Translate : Command {
     void apply(){
         glTranslatef(X, Y, Z);
     }
+
+
     std::string toString(){
         std::ostringstream stringStream;
         stringStream << "Translate: ";
@@ -122,7 +187,6 @@ struct TranslateT : Command {
         return stringStream.str();
     }
 };
-
 
 struct Rotate : Command {
     float angle, axisX, axisY, axisZ;
@@ -175,8 +239,6 @@ struct RotateT : Command {
     }
 };
 
-
-
 struct Scale : Command {
     float X, Y, Z;
     Scale(float x, float y, float z){
@@ -198,5 +260,3 @@ struct Scale : Command {
         return stringStream.str();
     }
 };
-
-

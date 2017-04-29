@@ -30,14 +30,6 @@ float get_float(std::vector<std::string> element, std::string key, float default
     }
 }
 
-bool hasEnding (std::string const &fullString, std::string const &ending) {
-    if (fullString.length() >= ending.length()) {
-        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-    } else {
-        return false;
-    }
-}
-
 void parse_element(EngineState& state, std::vector<std::string> element){
 
     std::string value;
@@ -75,16 +67,9 @@ void parse_element(EngineState& state, std::vector<std::string> element){
                                         ));
         
     } else if (std::find(element.begin(), element.end(), "model") != element.end()){
-        DrawModel* m = new DrawModel();
         value = get_raw(element, std::string("file"));
-        if (value != ""){
-            if (hasEnding(value, ".stl")){
-                m -> vertices = readSTL(value);
-            } else {
-                m -> vertices = readModel(value);
-            }
-            state.addSceneCommand(m);
-        }
+        DrawModel* m = new DrawModel(value);
+        state.addSceneCommand(m);
     }
 }
 

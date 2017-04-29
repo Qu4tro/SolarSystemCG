@@ -18,6 +18,5 @@
 
 void parse(FILE* fp, EngineState& state);
 std::string get_raw(std::vector<std::string> element, std::string key);
-bool hasEnding (std::string const &fullString, std::string const &ending);
 
 #endif

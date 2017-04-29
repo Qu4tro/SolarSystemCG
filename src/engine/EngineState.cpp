@@ -7,7 +7,20 @@ EngineState::EngineState() {
 
 void EngineState::addSceneCommand(Command* command) {
     sceneCommands.push_back(command);
+}
 
+void EngineState::VBOify(){
+    std::vector<Command*> sceneCommandsVBO;
+
+    for(auto it: sceneCommands){
+        if (DrawModel* draw = dynamic_cast<DrawModel*>(it)) {
+            sceneCommandsVBO.push_back(new DrawModelVBO(draw -> model_path));
+        } else {
+            sceneCommandsVBO.push_back(it);
+        }
+    }
+
+    sceneCommands = sceneCommandsVBO;
 }
 
 void EngineState::printCommands() {

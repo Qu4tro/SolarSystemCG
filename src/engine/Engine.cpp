@@ -19,6 +19,8 @@
 #define MODEL_MAX_LINE_LENGTH 100
 
 EngineState state;
+/* int timebase = 0; */
+/* int frame = 0; */
 
 void changeSize(int w, int h) {
     h = (h == 0) ? 1 : h;
@@ -31,6 +33,21 @@ void changeSize(int w, int h) {
 
     glMatrixMode(GL_MODELVIEW);
 }
+
+/* void displayFPS() { */
+/* 	int time; */
+/* 	char title[20]; */
+
+/* 	frame++; */
+/* 	time = glutGet(GLUT_ELAPSED_TIME); */
+/* 	if (time - timebase > 1000) { */
+/* 		float fps = frame * 1000.0/(time - timebase); */
+/* 		timebase = time; */
+/* 		frame = 0; */
+/* 		sprintf(title,"Engine  |  %.2f FPS",fps); */
+/* 		glutSetWindowTitle(title); */
+/*   } */
+/* } */
 
 void renderScene(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -46,6 +63,7 @@ void renderScene(void) {
     state.camera -> move();
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     state.applyCommands();
+    /* displayFPS(); */
     glutSwapBuffers();
 }
 
@@ -69,9 +87,7 @@ void upspecialkeyboard(int key_code, int x, int y){
 
 
 int main(int argc, char** argv){
-
-    bool drawModel = false;
-    bool validate = true;
+    bool validate = false;
 
     if (argc <= 1){
         printf("Usage: %s scene.xml\n", argv[0]);
@@ -86,16 +102,6 @@ int main(int argc, char** argv){
         }
     }
 
-    state = EngineState();
-    if (drawModel){
-        FILE* model_fp = fopen(argv[2], "r");
-        /* state.addSceneCommand(Command* command); */
-    
-    } else {
-        FILE* scene_fp = fopen(argv[1], "r");
-        parse(scene_fp, state);
-    }
-    
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(100,100);
@@ -112,16 +118,15 @@ int main(int argc, char** argv){
     glutSpecialFunc(specialkeyboard);
     glutSpecialUpFunc(upspecialkeyboard);
 
-    /* if (vbo){ */
-    /*   glEnableClientState(GL_VERTEX_ARRAY); */
-    /*   glGenBuffers(1, buffers); */
-    /*   glBindBuffer(GL_ARRAY_BUFFER, buffers[0]); */
-    /*   glBufferData(GL_ARRAY_BUFFER, nVertices * sizeof(int), vertices, GL_STATIC_DRAW); */
-    /*   glVertexPointer(3, GL_FLOAT, 0, 0); */
-    /* } */
-
     glEnable(GL_DEPTH_TEST);
     /* glEnable(GL_CULL_FACE); */
+
+
+    state = EngineState();
+    FILE* scene_fp = fopen(argv[1], "r");
+    parse(scene_fp, state);
+    state.VBOify();
+    state.printCommands();
 
     glutMainLoop();
 

@@ -21,6 +21,7 @@ class EngineState {
   public:
     EngineState();
     void addSceneCommand(Command* command);
+    void VBOify();
 
     void printCommands();
     void applyCommands();

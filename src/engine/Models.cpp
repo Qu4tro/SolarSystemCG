@@ -8,6 +8,14 @@ std::vector<std::string> split(std::string const &input) {
     return ret;
 }
 
+bool hasEnding (std::string const &fullString, std::string const &ending) {
+    if (fullString.length() >= ending.length()) {
+        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+    } else {
+        return false;
+    }
+}
+
 std::vector<float> readSTL(std::string filename){
     std::vector<float> vertices;
 
@@ -28,7 +36,7 @@ std::vector<float> readSTL(std::string filename){
 }
 
 
-std::vector<float> readModel(std::string filename){
+std::vector<float> readSimple(std::string filename){
     std::vector<float> vertices;
 
     std::ifstream ifile(filename);
@@ -46,3 +54,10 @@ std::vector<float> readModel(std::string filename){
 }
 
 
+std::vector<float> readModel(std::string model_path){
+   if (hasEnding(model_path, ".stl")){
+        return readSTL(model_path);
+    } else {
+        return readSimple(model_path);
+    }
+}

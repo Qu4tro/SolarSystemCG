@@ -1,11 +1,8 @@
 # Declaration of variables
-CC = g++
-
 ENG_SRC = src/engine
 ENG_EXE = Engine
 GEN_SRC = src/generator
 GEN_EXE = Generator
-
 
 engine: 
 	make -C $(ENG_SRC) && mv $(ENG_SRC)/$(ENG_EXE) .

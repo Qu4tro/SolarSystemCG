@@ -2,7 +2,7 @@
     <group>
         <models>
             <color B="0" G="0" R="1" />
-            <model file="../../models/comet.stl" />
+            <model file="models/teapot.stl" />
         </models>
     </group>
 </scene>

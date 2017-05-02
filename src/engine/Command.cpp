@@ -173,6 +173,13 @@ struct TranslateT : Command {
     float gTick, duration;
     std::vector<fTriple> points;
     TranslateT(float t, std::vector<fTriple> ps){
+        float gtick = 0.0f;
+        while (gtick < 1.0f) {
+            fTriple p = std::get<0>(currentCatmull(gtick));
+            std::cout << p.toString() << std::endl;
+            gtick += 0.0001f;
+        }
+
         gTick = 0;
         duration = t;
         points = ps;

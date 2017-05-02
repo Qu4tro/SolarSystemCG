@@ -8,6 +8,7 @@
 #include "Cube.h"
 #include "Sphere.h"
 #include "Cone.h"
+#include "Bezier.h"
 
 void usage(){
     std::cerr << "Model generator.\n\n";
@@ -26,6 +27,11 @@ Mesh* parse_argv(int argc, char* argv[]){
 
     if (model == "plane"){
         mesh = new Plane();
+
+    } else if (model == "bezier"){
+        assert(argc == 1 && "Tem de conter um e só um input file");
+        std::string filename(argv[0]);
+        mesh = new Bezier(filename);
 
     } else if (model == "box"){
         if (argc == 0){

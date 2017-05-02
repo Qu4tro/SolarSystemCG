@@ -4,11 +4,8 @@ CC_FLAGS = -Wall -Wextra -Wfloat-equal -Wshadow -Wpointer-arith -Wunreachable-co
 LIBS = -lm
 
 # Generator target
-Generator: Gen.o Mesh.o Plane.o Cube.o Sphere.o Cone.o fTriple.o
-	$(CC) Gen.o Mesh.o Plane.o Cube.o Sphere.o Cone.o fTriple.o -o Generator $(LIBS)
-
-# debug: generator.o create_models.o
-# 	$(CC) -g generator.o create_models.o -o Generator $(LIBS)
+Generator: Gen.o Mesh.o Plane.o Cube.o Sphere.o Cone.o fTriple.o Bezier.o
+	$(CC) Gen.o Mesh.o Plane.o Cube.o Sphere.o Cone.o fTriple.o Bezier.o -o Generator $(LIBS) $(CC_FLAGS)
 
 # To obtain object files
 %.o: %.c

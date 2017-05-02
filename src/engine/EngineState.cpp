@@ -4,12 +4,13 @@ EngineState::EngineState() {
     camera = new OrbitalCamera();
 }
 
-
 void EngineState::addSceneCommand(Command* command) {
     sceneCommands.push_back(command);
 }
-void EngineState::setSceneCommands(std::vector<Command*> command){
-    sceneCommands = std::vector<Command*>(command);
+void EngineState::setSceneCommands(std::vector<Command*> commands){
+    for(auto it: commands){
+        addSceneCommand(it);
+    }
 }
 
 void EngineState::VBOify(){

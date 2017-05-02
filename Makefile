@@ -4,6 +4,8 @@ ENG_EXE = Engine
 GEN_SRC = src/generator
 GEN_EXE = Generator
 
+all: engine generator 	
+
 engine: $(ENG_SRC)
 	make -C $(ENG_SRC) && mv $(ENG_SRC)/$(ENG_EXE) .
 

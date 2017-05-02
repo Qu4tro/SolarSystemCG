@@ -1,3 +1,6 @@
+#ifndef COMMANDS_CPP
+#define COMMANDS_CPP
+
 #include "Command.h"
 
 struct EnterContext : Command {
@@ -169,6 +172,11 @@ struct Translate : Command {
 struct TranslateT : Command {
     float gTick, duration;
     std::vector<fTriple> points;
+    TranslateT(float t, std::vector<fTriple> ps){
+        gTick = 0;
+        duration = t;
+        points = ps;
+    }
     TranslateT(float t){
         gTick = 0;
         duration = t;
@@ -212,7 +220,7 @@ struct TranslateT : Command {
         return std::make_pair(position, derivative);
     }
 
-    std::pair<fTriple, fTriple> getGlobalCatmullRomPoint(float tick){
+    std::pair<fTriple, fTriple> currentCatmull(float tick){
         int nPoints = points.size();
         float t = tick * nPoints;
         int index = floor(t);
@@ -226,28 +234,27 @@ struct TranslateT : Command {
                             );
     }
 
-    void renderCatmullRomCurve() {
+    void trace() {
         glColor3f(1, 1, 1);
-        float gt = 0.0f;
+        float gtick = 0.0f;
         glBegin(GL_LINE_LOOP);
-        while (gt < 1.0f) {
-            fTriple p = std::get<0>(getGlobalCatmullRomPoint(gt));
+        while (gtick < 1.0f) {
+            fTriple p = std::get<0>(currentCatmull(gtick));
             glVertex3f(p.x, p.y, p.z);
-            gt += 0.0001f;
+            gtick += 0.0001f;
         }
         glEnd();
     }
 
     void apply(){
-        renderCatmullRomCurve();
-        std::pair<fTriple, fTriple> vectors = getGlobalCatmullRomPoint(gTick);
+        trace();
+        std::pair<fTriple, fTriple> vectors = currentCatmull(gTick);
         fTriple p = std::get<0>(vectors);
         glTranslatef(p.x, p.y, p.z);
-
         /* fTriple v = std::get<1>(vectors); */
         /* curverotation v up*/
 
-        /* gTick = glutGet(GLUT_ELAPSED_TIME) / 1000 / duration */
+        /* equivalent to (wrapped to 1, to loop): gTick = glutGet(GLUT_ELAPSED_TIME) / 1000 / duration */
         gTick = fmod(glutGet(GLUT_ELAPSED_TIME) / (duration * 1000.0f), 1);
     }
 
@@ -343,3 +350,5 @@ struct Scale : Command {
         return stringStream.str();
     }
 };
+
+#endif

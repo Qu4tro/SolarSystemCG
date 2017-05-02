@@ -4,8 +4,8 @@ CC = g++
 LIBS = -lGL -lGLU -lglut -lm -lGLEW
 CC_FLAGS = -Wall -Wfloat-equal -Wshadow -Wpointer-arith -Wunreachable-code -Wno-unused-parameter -g
 
-all: Engine.o EngineState.o Command.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o
-	$(CC) EngineState.o Command.o Engine.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o -o Engine $(LIBS)
+all: Engine.o EngineState.o Command.o SceneParser.o tinyxml2.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o
+	$(CC) EngineState.o Command.o Engine.o SceneParser.o tinyxml2.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o -o Engine $(LIBS)
 
 # debug: Engine.o EngineState.o Command.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o
 # 	$(CC) -g EngineState.o Command.o Engine.o XML.o Models.o FPSCamera.o OrbitalCamera.o fTriple.o -o Engine) $(LIBS)

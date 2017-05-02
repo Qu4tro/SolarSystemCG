@@ -14,7 +14,7 @@
 
 #include "EngineState.h"
 #include "Command.h"
-#include "XML.h"
+#include "SceneParser.h"
 
 #define MODEL_MAX_LINE_LENGTH 100
 
@@ -86,19 +86,10 @@ void upspecialkeyboard(int key_code, int x, int y){
 
 
 int main(int argc, char** argv){
-    bool validate = false;
 
     if (argc <= 1){
         printf("Usage: %s scene.xml\n", argv[0]);
         return -1;
-    }
-
-    if (validate){
-        char command[256];
-        sprintf(command, "./preprocess_xml %s", argv[1]);
-        if (system(command) != 0){
-            return 1;
-        }
     }
 
     glutInit(&argc, argv);
@@ -110,6 +101,7 @@ int main(int argc, char** argv){
     glewInit();
 
     glutDisplayFunc(renderScene);
+    glutIdleFunc(renderScene);
     glutReshapeFunc(changeSize);
 
     glutKeyboardFunc(keyboard);
@@ -118,13 +110,12 @@ int main(int argc, char** argv){
     glutSpecialUpFunc(upspecialkeyboard);
 
     glEnable(GL_DEPTH_TEST);
-    /* glEnable(GL_CULL_FACE); */
+    glEnable(GL_CULL_FACE);
 
     state = EngineState();
-    FILE* scene_fp = fopen(argv[1], "r");
-    parse(scene_fp, state);
+    state.setSceneCommands(parse_scene(argv[1]));
     state.VBOify();
-    state.printCommands();
+    /* state.printCommands(); */
 
     glutMainLoop();
 

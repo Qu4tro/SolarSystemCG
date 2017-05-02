@@ -82,7 +82,7 @@ std::string fTriple::toString(){
     stringStream << x << " ";
     stringStream << y << " ";
     stringStream << z;
-    stringStream << ")" << std::endl;
+    stringStream << ")";
 
     return stringStream.str();
 }

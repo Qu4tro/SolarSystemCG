@@ -21,6 +21,7 @@ class EngineState {
   public:
     EngineState();
     void addSceneCommand(Command* command);
+    void setSceneCommands(std::vector<Command*> command);
     void VBOify();
 
     void printCommands();

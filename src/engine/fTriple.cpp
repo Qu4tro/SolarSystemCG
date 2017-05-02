@@ -76,3 +76,13 @@ void fTriple::print(){
 }
 
 
+std::string fTriple::toString(){
+    std::ostringstream stringStream;
+    stringStream << "(";
+    stringStream << x << " ";
+    stringStream << y << " ";
+    stringStream << z;
+    stringStream << ")" << std::endl;
+
+    return stringStream.str();
+}

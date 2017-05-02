@@ -1,7 +1,7 @@
 #include "EngineState.h"
 
 EngineState::EngineState() {
-    camera = new FPSCamera();
+    camera = new OrbitalCamera();
 }
 
 
@@ -26,7 +26,6 @@ void EngineState::VBOify(){
 void EngineState::printCommands() {
     for(auto it: sceneCommands){;
         std::cout << it -> toString();
-        std::cout << std::endl;
     }
 }
 

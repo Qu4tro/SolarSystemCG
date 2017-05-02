@@ -5,7 +5,11 @@ struct EnterContext : Command {
         glPushMatrix();
     }
     std::string toString(){
-        return "EnterContext";
+        std::ostringstream stringStream;
+        stringStream << "EnterContext";
+        stringStream << std::endl;
+
+        return stringStream.str();
     }
 
 };
@@ -15,7 +19,11 @@ struct ExitContext : Command {
         glPopMatrix();
     }
     std::string toString(){
-        return "ExitContext";
+        std::ostringstream stringStream;
+        stringStream << "ExitContext";
+        stringStream << std::endl;
+
+        return stringStream.str();
     }
 };
 
@@ -68,8 +76,9 @@ class DrawModelVBO : public Command {
         std::string toString(){
             std::ostringstream stringStream;
             stringStream << "DrawModelVBO: ";
-            stringStream << "nVertices=";
-            stringStream << nVertices;
+            stringStream << "file=";
+            stringStream << model_path;
+            stringStream << std::endl;
 
             return stringStream.str();
         }
@@ -99,8 +108,9 @@ class DrawModel : public Command {
         std::string toString(){
             std::ostringstream stringStream;
             stringStream << "DrawModel: ";
-            stringStream << "nVertices=";
-            stringStream << vertices.size();
+            stringStream << "file=";
+            stringStream << model_path;
+            stringStream << std::endl;
 
             return stringStream.str();
         }
@@ -125,6 +135,7 @@ struct Color : Command {
         stringStream << "R=" << R << " ";
         stringStream << "G=" << G << " ";
         stringStream << "B=" << B << " ";
+        stringStream << std::endl;
 
         return stringStream.str();
     }
@@ -149,40 +160,106 @@ struct Translate : Command {
         stringStream << "X=" << X << " ";
         stringStream << "Y=" << Y << " ";
         stringStream << "Z=" << Z << " ";
+        stringStream << std::endl;
 
         return stringStream.str();
     }
 };
 
 struct TranslateT : Command {
-    float tick, duration;
+    float gTick, duration;
     std::vector<fTriple> points;
-    TranslateT(float t, std::vector<fTriple> ps){
-        tick = 0;
+    TranslateT(float t){
+        gTick = 0;
         duration = t;
-        points = ps;
     }
 
-    std::pair<fTriple, fTriple> getCatmullRomPoint(float, fTriple p0, fTriple p1, fTriple p2, fTriple p3){
-        ; 
+    void addPoint(float x, float y, float z){
+        points.push_back(fTriple(x, y, z));
+    }
+
+    std::pair<fTriple, fTriple> catmullPoints(float t, fTriple p0, fTriple p1, fTriple p2, fTriple p3){
+
+        std::vector<float> catmull = {-0.5f,  1.5f, -1.5f,  0.5f,
+                                       1.0f, -2.5f,  2.0f, -0.5f,
+                                      -0.5f,  0.0f,  0.5f,  0.0f,
+                                       0.0f,  1.0f,  0.0f,  0.0f};
+
+        std::vector<float> T = {t*t*t, t*t, t, 1};
+        std::vector<float> dT = {3*t*t, 2*t, 1, 0};
+
+        std::vector<float> TM = {0, 0, 0, 0};
+        std::vector<float> dTM = {0, 0, 0, 0};
+
+        fTriple position;
+        fTriple derivative;
+
+        for (int y = 0; y < 4; y++) { 
+            for (int z = 0; z < 4; z++) {
+                 TM[y] +=  T[z] * catmull[4*z+y];
+                dTM[y] += dT[z] * catmull[4*z+y];
+            }
+        }
+
+        position.x = TM[0] * p0.x + TM[1] * p1.x + TM[2] * p2.x + TM[3] * p3.x;
+        position.y = TM[0] * p0.y + TM[1] * p1.y + TM[2] * p2.y + TM[3] * p3.y;
+        position.z = TM[0] * p0.z + TM[1] * p1.z + TM[2] * p2.z + TM[3] * p3.z;
+
+        derivative.x = dTM[0] * p0.x + dTM[1] * p1.x + dTM[2] * p2.x + dTM[3] * p3.x;
+        derivative.y = dTM[0] * p0.y + dTM[1] * p1.y + dTM[2] * p2.y + dTM[3] * p3.y;
+        derivative.z = dTM[0] * p0.z + dTM[1] * p1.z + dTM[2] * p2.z + dTM[3] * p3.z;
+
+        return std::make_pair(position, derivative);
+    }
+
+    std::pair<fTriple, fTriple> getGlobalCatmullRomPoint(float tick){
+        int nPoints = points.size();
+        float t = tick * nPoints;
+        int index = floor(t);
+        float baseT = t - index;
+
+        return catmullPoints(baseT,
+                             points[(index - 1 + nPoints) % nPoints],
+                             points[(index     + nPoints) % nPoints],
+                             points[(index + 1 + nPoints) % nPoints],
+                             points[(index + 2 + nPoints) % nPoints]
+                            );
+    }
+
+    void renderCatmullRomCurve() {
+        glColor3f(1, 1, 1);
+        float gt = 0.0f;
+        glBegin(GL_LINE_LOOP);
+        while (gt < 1.0f) {
+            fTriple p = std::get<0>(getGlobalCatmullRomPoint(gt));
+            glVertex3f(p.x, p.y, p.z);
+            gt += 0.0001f;
+        }
+        glEnd();
     }
 
     void apply(){
-        if (tick == 1){
-            tick = 0;
-            points = std::vector<fTriple>(points.begin() + 1, points.end());
-        }
-        std::pair<fTriple, fTriple> vectors = getCatmullRomPoint(tick, points[0], points[1], points[2], points[3]);
+        renderCatmullRomCurve();
+        std::pair<fTriple, fTriple> vectors = getGlobalCatmullRomPoint(gTick);
         fTriple p = std::get<0>(vectors);
-        fTriple v = std::get<1>(vectors);
         glTranslatef(p.x, p.y, p.z);
+
+        /* fTriple v = std::get<1>(vectors); */
+        /* curverotation v up*/
+
+        /* gTick = glutGet(GLUT_ELAPSED_TIME) / 1000 / duration */
+        gTick = fmod(glutGet(GLUT_ELAPSED_TIME) / (duration * 1000.0f), 1);
     }
 
     std::string toString(){
         std::ostringstream stringStream;
         stringStream << "TranslateT: ";
-        stringStream << "Duration=" << duration << " ";
-        stringStream << "Number of points=" << points.size() << " ";
+        stringStream << "time=" << duration << " ";
+        stringStream << "points=" << "[";
+        for(auto it: points){
+            stringStream << it.toString();
+        }
+        stringStream << "]" << std::endl;
 
         return stringStream.str();
     }
@@ -208,33 +285,38 @@ struct Rotate : Command {
         stringStream << "axisX=" << axisX << " ";
         stringStream << "axisY=" << axisY << " ";
         stringStream << "axisZ=" << axisZ << " ";
+        stringStream << std::endl;
+
         return stringStream.str();
     }
 };
 
 struct RotateT : Command {
-    float tick;
-    float angle, axisX, axisY, axisZ;
-    RotateT(float period, float x, float y, float z){
-        tick = 0;
-        angle = (2 * M_PI) / period;
+    float period;
+    float axisX, axisY, axisZ;
+    RotateT(float p, float x, float y, float z){
+        period = p;
         axisX = x;
         axisY = y;
         axisZ = z;
     }
 
     void apply(){
-        glRotatef(tick * angle, axisX, axisY, axisZ);
-        tick += 0.001;
+        /* float angle = fmod((glutGet(GLUT_ELAPSED_TIME) / 1000.0f ) * (360.0f / period), 360.0f); */
+        float angle = fmod((glutGet(GLUT_ELAPSED_TIME) * 360.0f ) / (period * 1000.0f), 360.0f);
+        glRotatef(angle, axisX, axisY, axisZ);
     }
+
     std::string toString(){
         std::ostringstream stringStream;
         stringStream << "RotateT: ";
 
-        stringStream << "angle=" << angle << " ";
-        stringStream << "axisX=" << axisX << " ";
-        stringStream << "axisY=" << axisY << " ";
-        stringStream << "axisZ=" << axisZ << " ";
+        stringStream << "time="   << period << " ";
+        stringStream << "axisX="  << axisX  << " ";
+        stringStream << "axisY="  << axisY  << " ";
+        stringStream << "axisZ="  << axisZ  << " ";
+        stringStream << std::endl;
+
         return stringStream.str();
     }
 };
@@ -256,6 +338,7 @@ struct Scale : Command {
         stringStream << "X=" << X << " ";
         stringStream << "Y=" << Y << " ";
         stringStream << "Z=" << Z << " ";
+        stringStream << std::endl;
 
         return stringStream.str();
     }

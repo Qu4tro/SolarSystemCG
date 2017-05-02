@@ -2,6 +2,7 @@
 #define TRIPLE_H
 
 #include <iostream>
+#include <sstream>
 #include <math.h>
 
 struct fTriple {
@@ -23,6 +24,7 @@ struct fTriple {
     void sphericToCartesian(fTriple center);
     void cartesianToSpheric(fTriple center);
     
+    std::string toString();
 };
 
 

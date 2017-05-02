@@ -19,8 +19,8 @@
 #define MODEL_MAX_LINE_LENGTH 100
 
 EngineState state;
-/* int timebase = 0; */
-/* int frame = 0; */
+int timebase = 0;
+int frame = 0;
 
 void changeSize(int w, int h) {
     h = (h == 0) ? 1 : h;
@@ -34,20 +34,20 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-/* void displayFPS() { */
-/* 	int time; */
-/* 	char title[20]; */
+void displayFPS() {
+	int time;
+	char title[20];
 
-/* 	frame++; */
-/* 	time = glutGet(GLUT_ELAPSED_TIME); */
-/* 	if (time - timebase > 1000) { */
-/* 		float fps = frame * 1000.0/(time - timebase); */
-/* 		timebase = time; */
-/* 		frame = 0; */
-/* 		sprintf(title,"Engine  |  %.2f FPS",fps); */
-/* 		glutSetWindowTitle(title); */
-/*   } */
-/* } */
+	frame++;
+	time = glutGet(GLUT_ELAPSED_TIME);
+	if (time - timebase > 1000) {
+		float fps = frame * 1000.0/(time - timebase);
+		timebase = time;
+		frame = 0;
+		sprintf(title,"CG  |  %.2f FPS",fps);
+		glutSetWindowTitle(title);
+  }
+}
 
 void renderScene(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -63,10 +63,9 @@ void renderScene(void) {
     state.camera -> move();
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     state.applyCommands();
-    /* displayFPS(); */
+    displayFPS();
     glutSwapBuffers();
 }
-
 
 void keyboard(unsigned char key_code, int x, int y){
     state.camera -> normalkey(key_code, true);
@@ -120,7 +119,6 @@ int main(int argc, char** argv){
 
     glEnable(GL_DEPTH_TEST);
     /* glEnable(GL_CULL_FACE); */
-
 
     state = EngineState();
     FILE* scene_fp = fopen(argv[1], "r");

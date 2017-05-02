@@ -1,5 +1,6 @@
 #include "XML.h"
 
+TranslateT* lastTT;
 
 typedef enum {word, sep, lbracket, rbracket} Symbol;
 Symbol sym;
@@ -31,8 +32,13 @@ float get_float(std::vector<std::string> element, std::string key, float default
 }
 
 void parse_element(EngineState& state, std::vector<std::string> element){
-
     std::string value;
+
+    if (lastTT && lastTT -> points.size() > 0 && std::find(element.begin(), element.end(), "point") == element.end()){
+        state.addSceneCommand(lastTT);
+        lastTT = nullptr;
+    }
+
 
     if (std::find(element.begin(), element.end(), "group") != element.end()){
         if (std::find(element.begin(), element.end(), "/") != element.end()){
@@ -42,17 +48,37 @@ void parse_element(EngineState& state, std::vector<std::string> element){
         }
 
     } else if (std::find(element.begin(), element.end(), "translate") != element.end()){
-        state.addSceneCommand(new Translate(get_float(element, "X", 1),
-                                            get_float(element, "Y", 1),
-                                            get_float(element, "Z", 1)
-                             ));
+        float timett = get_float(element, "time", -1);
+        if (timett < 0){
+            state.addSceneCommand(
+                    new Translate(get_float(element, "X", 1),
+                                  get_float(element, "Y", 1),
+                                  get_float(element, "Z", 1)));
+        } else {
+            lastTT = new TranslateT(timett);
+        }
+
+    } else if (std::find(element.begin(), element.end(), "point") != element.end()){
+        lastTT -> addPoint(get_float(element, "X", 0),
+                           get_float(element, "Y", 0),
+                           get_float(element, "Z", 0));
         
     } else if (std::find(element.begin(), element.end(), "rotate") != element.end()){
-        state.addSceneCommand(new Rotate(get_float(element, "angle", 0),
-                                         get_float(element, "axisX", 0),
-                                         get_float(element, "axisY", 0),
-                                         get_float(element, "axisZ", 0)
-                             ));
+        float timett = get_float(element, "time", -1);
+        if (timett < 0){
+            state.addSceneCommand(new Rotate(get_float(element, "angle", 0),
+                                             get_float(element, "axisX", 0),
+                                             get_float(element, "axisY", 0),
+                                             get_float(element, "axisZ", 0)
+                                 ));
+        } else {
+            state.addSceneCommand(new RotateT(timett,
+                                              get_float(element, "axisX", 0),
+                                              get_float(element, "axisY", 0),
+                                              get_float(element, "axisZ", 0)
+                                 ));
+       
+        }
 
     } else if (std::find(element.begin(), element.end(), "scale") != element.end()){ 
         state.addSceneCommand(new Scale(get_float(element, "X", 1),

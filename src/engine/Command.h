@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "fTriple.h"
 #include "Models.h"

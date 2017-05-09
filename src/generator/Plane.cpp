@@ -4,18 +4,20 @@ Plane::Plane(){
 
 }
 
-std::vector<fTriple> Plane::getPoints(){
+std::string Plane::getObj(){
 
-    std::vector<fTriple> points;
+    ObjWriter obj;
 
-    points.push_back(fTriple(100, 0, 100));
-    points.push_back(fTriple(100, 0, -100));
-    points.push_back(fTriple(-100, 0, -100));
+    obj.addVertex(100, 0, 100);
+    obj.addVertex(100, 0, -100);
+    obj.addVertex(-100, 0, -100);
+    obj.makeTriangle();
 
-    points.push_back(fTriple(100, 0, 100));
-    points.push_back(fTriple(-100, 0, 100));
-    points.push_back(fTriple(-100, 0, -100));
+    obj.addVertex(100, 0, 100);
+    obj.addVertex(-100, 0, 100);
+    obj.addVertex(-100, 0, -100);
+    obj.makeTriangle();
 
-    return points;
+    return obj.toString();
 }
 

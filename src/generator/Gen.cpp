@@ -80,7 +80,7 @@ int main(int argc, char* argv[]){
     std::ofstream output(filename);
     Mesh* mesh = parse_argv(argc, argv);
 
-    output << mesh -> toString();
+    output << mesh -> getObj();
 
     return 0;
 }

@@ -96,13 +96,15 @@ fTriple Bezier::bezierSurface(float s, float t){
                           bezierCurve(s, controlPoints[12], controlPoints[13], controlPoints[14], controlPoints[15]));
 }
 
-std::vector<fTriple> Bezier::getPoints(){
-    std::vector<fTriple> points;
+std::string Bezier::getObj(){
+
+
+    std::ostringstream objStream;
+    ObjWriter obj;
 
     if (controlPoints.size() <= 0){
         for(auto b: patches){
-            auto bp = b.getPoints();
-            points.insert(points.end(), bp.begin(), bp.end());
+            objStream << b.getObj();
         }
     } else {
         assert(controlPoints.size() == BEZIER_N_VERTICES);
@@ -128,18 +130,21 @@ std::vector<fTriple> Bezier::getPoints(){
                 /* std::cout << p2.toLine(); */
                 /* std::cout << p3.toLine(); */
 
-                points.push_back(p0);
-                points.push_back(p2);
-                points.push_back(p3);
+                obj.addVertex(p0.x, p0.y, p0.z);
+                obj.addVertex(p2.x, p2.y, p2.z);
+                obj.addVertex(p3.x, p3.y, p3.z);
+                obj.makeTriangle();
 
-                points.push_back(p0);
-                points.push_back(p3);
-                points.push_back(p1);
+                obj.addVertex(p0.x, p0.y, p0.z);
+                obj.addVertex(p3.x, p3.y, p3.z);
+                obj.addVertex(p1.x, p1.y, p1.z);
+                obj.makeTriangle();
 
             }
         }
     }
 
-    return points;
+    objStream << obj.toString();
+    return objStream.str();
 }
 

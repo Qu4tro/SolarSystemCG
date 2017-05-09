@@ -18,9 +18,9 @@ Sphere::Sphere(float radius_, float slices_, float stacks_){
     stacks = stacks_;
 }
 
-std::vector<fTriple> Sphere::getPoints(){
+std::string Sphere::getObj(){
 
-    std::vector<fTriple> points;
+    ObjWriter obj;
 
     float sliceAngle = M_PI / slices;
 
@@ -43,22 +43,22 @@ std::vector<fTriple> Sphere::getPoints(){
             v2Z = radius * cos(alpha) * cos(beta + sliceAngle);
 
 
-            points.push_back(fTriple(
+            obj.addVertex(
                     radius * sin(alpha) * cos(beta),
                     radius * sin(beta),
-                    radius * cos(alpha) * cos(beta)));
-            points.push_back(fTriple(v1X, v1Y, v1Z));
-            points.push_back(fTriple(v2X, v2Y, v2Z));
+                    radius * cos(alpha) * cos(beta));
+            obj.addVertex(v1X, v1Y, v1Z);
+            obj.addVertex(v2X, v2Y, v2Z);
 
-            points.push_back(fTriple(
+            obj.addVertex(
                     radius * sin(alpha + 2*sliceAngle) * cos(beta + sliceAngle),
                     radius * sin(beta + sliceAngle),
-                    radius * cos(alpha + 2*sliceAngle) * cos(beta + sliceAngle)));
-            points.push_back(fTriple(v2X, v2Y, v2Z));
-            points.push_back(fTriple(v1X, v1Y, v1Z));
+                    radius * cos(alpha + 2*sliceAngle) * cos(beta + sliceAngle));
+            obj.addVertex(v2X, v2Y, v2Z);
+            obj.addVertex(v1X, v1Y, v1Z);
         }
     }
 
-    return points;
+    return obj.toString();
 }
 

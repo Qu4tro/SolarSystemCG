@@ -21,9 +21,9 @@ Cube::Cube(float W, float L, float H, int divisions){
     partitions = divisions;
 }
 
-std::vector<fTriple> Cube::getPoints(){
+std::string Cube::getObj(){
 
-    std::vector<fTriple> points;
+    ObjWriter obj;
 
     float x, y, z, hX, hY, hZ, v1X, v1Y, v1Z, v2X, v2Y, v2Z;
 
@@ -45,13 +45,15 @@ std::vector<fTriple> Cube::getPoints(){
                 v2X = hX - x * (i + 1);
                 v2Y = hY - y * (j + 1);
 
-                points.push_back(fTriple(v1X, v2Y, k * hZ));
-                points.push_back(fTriple(v1X, v1Y, k * hZ));
-                points.push_back(fTriple(v2X, v2Y, k * hZ));
+                obj.addVertex(v1X, v2Y, k * hZ);
+                obj.addVertex(v1X, v1Y, k * hZ);
+                obj.addVertex(v2X, v2Y, k * hZ);
+                obj.makeTriangle();
 
-                points.push_back(fTriple(v2X, v1Y, k * hZ));
-                points.push_back(fTriple(v2X, v2Y, k * hZ));
-                points.push_back(fTriple(v1X, v1Y, k * hZ));
+                obj.addVertex(v2X, v1Y, k * hZ);
+                obj.addVertex(v2X, v2Y, k * hZ);
+                obj.addVertex(v1X, v1Y, k * hZ);
+                obj.makeTriangle();
             }
         }
     }
@@ -67,13 +69,15 @@ std::vector<fTriple> Cube::getPoints(){
                 v2X = hX - x * (i + 1);
                 v2Z = hZ - z * (j + 1);
 
-                points.push_back(fTriple(v1X, k * hY, v1Z));
-                points.push_back(fTriple(v2X, k * hY, v2Z));
-                points.push_back(fTriple(v2X, k * hY, v1Z));
+                obj.addVertex(v1X, k * hY, v1Z);
+                obj.addVertex(v2X, k * hY, v2Z);
+                obj.addVertex(v2X, k * hY, v1Z);
+                obj.makeTriangle();
 
-                points.push_back(fTriple(v1X, k * hY, v2Z));
-                points.push_back(fTriple(v2X, k * hY, v2Z));
-                points.push_back(fTriple(v1X, k * hY, v1Z));
+                obj.addVertex(v1X, k * hY, v2Z);
+                obj.addVertex(v2X, k * hY, v2Z);
+                obj.addVertex(v1X, k * hY, v1Z);
+                obj.makeTriangle();
             }
         }
     }
@@ -90,19 +94,21 @@ std::vector<fTriple> Cube::getPoints(){
                 v2Y = hY - y * (i + 1);
                 v2Z = hZ - z * (j + 1);
 
-                points.push_back(fTriple(k * hX, v2Y, v1Z));
-                points.push_back(fTriple(k * hX, v1Y, v1Z));
-                points.push_back(fTriple(k * hX, v2Y, v2Z));
+                obj.addVertex(k * hX, v2Y, v1Z);
+                obj.addVertex(k * hX, v1Y, v1Z);
+                obj.addVertex(k * hX, v2Y, v2Z);
+                obj.makeTriangle();
 
-                points.push_back(fTriple(k * hX, v1Y, v2Z));
-                points.push_back(fTriple(k * hX, v2Y, v2Z));
-                points.push_back(fTriple(k * hX, v1Y, v1Z));
+                obj.addVertex(k * hX, v1Y, v2Z);
+                obj.addVertex(k * hX, v2Y, v2Z);
+                obj.addVertex(k * hX, v1Y, v1Z);
+                obj.makeTriangle();
             }
         }
     }
 
 
 
-    return points;
+    return obj.toString();
 }
 

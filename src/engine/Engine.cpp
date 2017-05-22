@@ -13,7 +13,7 @@
 #include <memory>
 
 #include "EngineState.h"
-#include "Command.h"
+#include "Commands/Command.h"
 #include "SceneParser.h"
 
 #define MODEL_MAX_LINE_LENGTH 100
@@ -84,7 +84,6 @@ void upspecialkeyboard(int key_code, int x, int y){
     glutPostRedisplay();
 }
 
-
 int main(int argc, char** argv){
 
     if (argc <= 1){
@@ -94,8 +93,8 @@ int main(int argc, char** argv){
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowPosition(100,100);
-    glutInitWindowSize(800,800);
+    glutInitWindowPosition(100, 100);
+    glutInitWindowSize(800, 800);
     glutCreateWindow("CG");
 
     glewInit();

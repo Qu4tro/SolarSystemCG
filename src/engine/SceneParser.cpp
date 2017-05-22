@@ -114,12 +114,29 @@ Command* parse_color(XMLNode* color){
 
 }
 
+bool hasEnding (std::string const &fullString, std::string const &ending) {
+    if (fullString.length() >= ending.length()) {
+        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+    } else {
+        return false;
+    }
+}
+
 Command* parse_model(XMLNode* model){
     assert(model -> NoChildren());
     XMLElement* element = model -> ToElement();
     std::string filename(element -> Attribute("file"));
 
-    return new DrawModel(filename);
+    Model* m;
+    if (hasEnding(filename, ".obj")){
+        /* m = new Model_obj(filename); */
+    } else if (hasEnding(filename, ".stl")) { 
+        m = new Model_stl(filename);
+    } else if (hasEnding(filename, ".3d")) {
+        m = new Model_3D(filename);
+    }
+
+    return new DrawModel(m);
 
 }
 

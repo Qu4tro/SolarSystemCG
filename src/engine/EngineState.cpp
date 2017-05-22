@@ -18,7 +18,7 @@ void EngineState::VBOify(){
 
     for(auto it: sceneCommands){
         if (DrawModel* draw = dynamic_cast<DrawModel*>(it)) {
-            sceneCommandsVBO.push_back(new DrawModelVBO(draw -> model_path));
+            sceneCommandsVBO.push_back(new DrawModelVBO(draw -> model));
         } else {
             sceneCommandsVBO.push_back(it);
         }

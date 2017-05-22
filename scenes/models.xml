@@ -1,0 +1,18 @@
+<scene>
+	<group>
+		<translate time="10">
+	        <point X="1.652" Y="8.26" Z="0"/>
+	        <point X="1.239" Y="6.195" Z="-8.26"/>
+	        <point X="0" Y="0" Z="-1.239"/>
+	        <point X="-1.239" Y="-6.195" Z="-8.26"/>
+	        <point X="-1.652" Y="-8.26" Z="0"/>
+	        <point X="-1.239" Y="-6.195" Z="8.26"/>
+	        <point X="0" Y="0" Z="1.239"/>
+	        <point X="1.239" Y="6.195" Z="8.26"/>
+	    </translate>
+		<models>
+            <model file="models/sphere.obj" />
+		</models>	
+	</group>
+</scene>
+

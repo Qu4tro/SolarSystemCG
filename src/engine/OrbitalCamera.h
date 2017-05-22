@@ -1,5 +1,4 @@
-#ifndef OCAMERA_H
-#define OCAMERA_H
+#pragma once
 
 #include <algorithm>
 #include <math.h>
@@ -22,12 +21,11 @@ class OrbitalCamera : public Camera {
         void normalkey(unsigned char key, bool pressed);
 
     private:
-        int specialKeys[128];
-        char normalKeys[256];
+        bool specialKeys[128];
+        bool normalKeys[256];
         fTriple cameraPosition;
         fTriple cameraFocus;
         fTriple cameraTilt;
         float cameraSpeed;
 };
 
-#endif

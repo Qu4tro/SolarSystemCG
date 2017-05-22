@@ -1,5 +1,6 @@
-#ifndef TRIPLE_H
-#define TRIPLE_H
+#pragma once
+
+#include <string>
 
 #include <iostream>
 #include <sstream>
@@ -28,4 +29,3 @@ struct fTriple {
 };
 
 
-#endif

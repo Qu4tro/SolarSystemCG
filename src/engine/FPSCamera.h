@@ -1,5 +1,4 @@
-#ifndef FCAMERA_H
-#define FCAMERA_H
+#pragma once
 
 #include "Camera.h"
 
@@ -27,4 +26,3 @@ class FPSCamera : public Camera {
         float cameraSpeed;
 };
 
-#endif

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+./Generator cone models/cone.obj
+./Generator box models/box.obj
+./Generator sphere models/sphere.obj
+./Generator plane models/plane.obj
+./Generator bezier bezier/teapot.patch models/teapot.obj

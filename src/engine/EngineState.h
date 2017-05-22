@@ -1,21 +1,14 @@
-#ifndef ENGINESTATE_H
-#define ENGINESTATE_H
+#pragma once
 
 #include <vector>
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <utility>
-#include <algorithm>
-#include <iterator>
-#include <tuple>
-#include <math.h>
 
 #include "Camera.h"
+#include "Commands/Command.h"
+
 #include "OrbitalCamera.h"
 #include "FPSCamera.h"
-#include "Command.cpp"
+#include "Commands/DrawModelVBO.h"
+#include "Commands/DrawModel.h"
 
 class EngineState {
   public:
@@ -31,5 +24,3 @@ class EngineState {
   private:
     std::vector<Command*> sceneCommands;
 };
-
-#endif

@@ -1,0 +1,21 @@
+<scene>
+	<group>
+		<scale X="22" Y="22" Z="22"/>
+		<color R="255" G="165" B="0"/>
+		<models>
+            <model file="models/sphere.obj" />
+		</models>
+	</group>
+	<group>
+		<rotate time="2" axisY="1"/>
+		<group>
+			<translate X="30"/>
+			<rotate time="5" axisY="1" />
+			<scale X="0.3" Y="0.3" Z="0.3"/>
+			<color R="102" G="102" B="102"/>
+			<models>
+                <model file="models/sphere.obj" />
+			</models>
+		</group>
+	</group>
+</scene>

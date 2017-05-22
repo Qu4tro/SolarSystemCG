@@ -2,14 +2,14 @@
    <group>
         <translate X="1" />
         <models>
-            <model file="models/sphere.3d" />
+            <model file="models/sphere.obj" />
         </models>
         <group>
             <translate X="5" Y="0" Z="2" />
             <rotate angle="45" axisX="0" axisY="1" axisZ="0" />
             <scale X="1" Y="2" Z="3" /> 
         <models>
-                <model file="/home/quatro/OCurso/CG/SolarSystemCG/models/box.3d" />
+                <model file="/home/quatro/OCurso/CG/SolarSystemCG/models/box.obj" />
             </models>
             </group>
 
@@ -18,7 +18,7 @@
             <scale X="1" Y="2" Z="3" /> 
             <rotate angle="45" axisX="0" axisY="1" axisZ="0" />
             <models>
-                <model file="models/sphere.3d" />
+                <model file="models/sphere.obj" />
             </models>
         </group>
 

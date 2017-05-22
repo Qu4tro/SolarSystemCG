@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -27,5 +26,3 @@ struct Camera {
     virtual void specialkey(int key, bool pressed) = 0;
     virtual void normalkey(unsigned char key, bool pressed) = 0;
 };
-
-#endif

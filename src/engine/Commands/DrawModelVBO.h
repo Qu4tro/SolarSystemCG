@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../Model.h"
+#include "../Model_3D.h"
 #include "Command.h"
 #include <GL/glew.h>
+#include <assert.h>
 /* #include <GL/glut.h> */
 /* #include <GL/gl.h> */
 
@@ -16,9 +17,9 @@ class DrawModelVBO : public Command {
         void load();
 
     public:
-        Model* model;
+        Model_3D model;
 
-        DrawModelVBO(Model*);
+        DrawModelVBO(Model_3D);
 
         void apply();
         std::string toString();

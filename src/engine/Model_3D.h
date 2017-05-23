@@ -16,18 +16,21 @@ class Model_3D : public Model {
         std::vector<float> vertices;
         std::vector<float> normals;
         std::vector<float> texcoords;
+        std::string model_path;
+        bool first_run;
+
 
     public:
         Model_3D();
         Model_3D(std::string);
+
         void load();
+        bool loaded();
+        std::string getPath();
 
         std::vector<float> getVertices();
         std::vector<float> getNormals();
         std::vector<float> getTexcoords();
 
         std::string toString();
-
-        std::string model_path;
-        bool loaded;
 };

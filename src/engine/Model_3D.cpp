@@ -3,10 +3,10 @@
 #include <iostream>
 
 Model_3D::Model_3D(){
-    loaded = false;
+    first_run = false;
 }
 Model_3D::Model_3D(std::string path){
-    loaded = false;
+    first_run = false;
     model_path = path;
 }
 
@@ -38,8 +38,8 @@ void Model_3D::load(){
         }
     }
 
-    std::cout << toString() << std::endl;
-    loaded = true;
+    first_run = true;
+    /* std::cout << toString() << std::endl; */
 }
 
 std::vector<float> Model_3D::getVertices(){
@@ -51,11 +51,19 @@ std::vector<float> Model_3D::getNormals(){
 std::vector<float> Model_3D::getTexcoords(){
     return texcoords;
 }
+bool Model_3D::loaded(){
+    return first_run;
+}
+
+std::string Model_3D::getPath(){
+    return model_path;
+}
+
 std::string Model_3D::toString(){
     std::ostringstream stringStream;
     stringStream << "Model: ";
     stringStream << "path=" << model_path << " ";
-    stringStream << "loaded=" << loaded << " ";
+    stringStream << "loaded=" << !loaded() << " ";
     stringStream << "#V=" << vertices.size() << " ";
     stringStream << "#VN=" << normals.size() << " ";
     stringStream << "#VT=" << texcoords.size() << " ";

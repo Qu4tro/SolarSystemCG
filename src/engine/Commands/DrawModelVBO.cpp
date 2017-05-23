@@ -6,24 +6,24 @@
 #include "DrawModelVBO.h"
 
 void DrawModelVBO::load(){
-    nVertices = model -> getVertices().size();
+    assert(model.loaded() == false);
+    model.load();
+    nVertices = model.getVertices().size();
     glGenBuffers(1, &geometry_array);
     glBindBuffer(GL_ARRAY_BUFFER, geometry_array);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVertices, &(model -> getVertices()[0]), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVertices, &(model.getVertices()[0]), GL_STATIC_DRAW);
 }
 
-DrawModelVBO::DrawModelVBO(Model* m){
+DrawModelVBO::DrawModelVBO(Model_3D m){
     geometry_array = 0;
     indice_array = 0;
     model = m;
-    load();
 }
 
 void DrawModelVBO::apply(){
-    /* if (!model -> loaded){ */
-    /*     model -> load(); */
-    /*     load(); */
-    /* } */
+    if (model.loaded() == false){
+        load();
+    }
     glBindBuffer(GL_ARRAY_BUFFER, geometry_array);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, 0);
@@ -49,7 +49,7 @@ std::string DrawModelVBO::toString(){
     std::ostringstream stringStream;
     stringStream << "DrawModelVBO: ";
     stringStream << "file=";
-    stringStream << model -> model_path;
+    stringStream << model.getPath();
     stringStream << std::endl;
 
     return stringStream.str();

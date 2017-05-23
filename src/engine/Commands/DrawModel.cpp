@@ -1,14 +1,22 @@
 #include "DrawModel.h"
 
-DrawModel::DrawModel(Model* m){
+DrawModel::DrawModel(Model_3D m){
+    assert(model.loaded() == false);
     model = m;
 }
 
 void DrawModel::apply(){
-    auto points = model -> getVertices();
+    if (model.loaded() == false){
+        model.load();
+    }
+    auto vertices = model.getVertices();
+    auto normals = model.getNormals();
+    assert(vertices.size() == normals.size() || normals.size() == 0);
     glBegin(GL_TRIANGLES);
-    for(unsigned i = 0; i < points.size(); i += 3){
-        glVertex3f(points[i], points[i + 1], points[i + 2]);
+    for(unsigned i = 0; i < vertices.size(); i += 3){
+        if (normals.size() != 0)
+            glNormal3f(normals[i], normals[i + 1], normals[i + 2]);
+        glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
     }
     glEnd();
 }
@@ -17,7 +25,7 @@ std::string DrawModel::toString(){
     std::ostringstream stringStream;
     stringStream << "DrawModel: ";
     stringStream << "file=";
-    stringStream << model -> model_path;
+    stringStream << model.getPath();
     stringStream << std::endl;
 
     return stringStream.str();

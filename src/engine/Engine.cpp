@@ -84,14 +84,7 @@ void upspecialkeyboard(int key_code, int x, int y){
     glutPostRedisplay();
 }
 
-int main(int argc, char** argv){
-
-    if (argc <= 1){
-        printf("Usage: %s scene.xml\n", argv[0]);
-        return -1;
-    }
-
-    glutInit(&argc, argv);
+void inits(){
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(100, 100);
     glutInitWindowSize(800, 800);
@@ -110,6 +103,20 @@ int main(int argc, char** argv){
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_NORMALIZE);
+    glEnable(GL_LIGHTING);
+}
+
+int main(int argc, char** argv){
+
+    if (argc <= 1){
+        printf("Usage: %s scene.xml\n", argv[0]);
+        return -1;
+    }
+
+    glutInit(&argc, argv);
+    inits();
+
 
     state = EngineState();
     state.setSceneCommands(parse_scene(argv[1]));

@@ -4,14 +4,13 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "fTriple.h"
+
+#include "ObjWriter.h"
 
 struct Mesh {
     virtual ~Mesh() { }
 
-    virtual std::vector<fTriple> getPoints() = 0;
-
-    std::string toString();
+    virtual std::string getObj() = 0;
 };
 
 

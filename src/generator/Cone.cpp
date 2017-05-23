@@ -21,9 +21,9 @@ Cone::Cone(float radius_, float height_, float slices_, float stacks_){
     stacks = stacks_;
 }
 
-std::vector<fTriple> Cone::getPoints(){
+std::string Cone::getObj(){
 
-    std::vector<fTriple> points;
+    ObjWriter obj;
 
     float radius2;
     float stackHeight = height / stacks;
@@ -44,9 +44,10 @@ std::vector<fTriple> Cone::getPoints(){
         v2Y = height + stackHeight;
         v2Z = radius * cos(alpha + sliceAngle);
 
-        points.push_back(fTriple(v1X, height, v1Z));
-        points.push_back(fTriple(0, height, 0));
-        points.push_back(fTriple(v2X, height, v2Z));
+        obj.addVertex(v1X, height, v1Z);
+        obj.addVertex(0, height, 0);
+        obj.addVertex(v2X, height, v2Z);
+        obj.makeTriangle();
     }
 
     for (int i = 0; i < stacks; i++) {
@@ -62,19 +63,21 @@ std::vector<fTriple> Cone::getPoints(){
             v2Y = height + stackHeight;
             v2Z = cos(alpha + sliceAngle);
 
-            points.push_back(fTriple(radius  * v1X, v1Y, radius  * v1Z));
-            points.push_back(fTriple(radius  * v2X, v1Y, radius  * v2Z));
-            points.push_back(fTriple(radius2 * v1X, v2Y, radius2 * v1Z));
+            obj.addVertex(radius  * v1X, v1Y, radius  * v1Z);
+            obj.addVertex(radius  * v2X, v1Y, radius  * v2Z);
+            obj.addVertex(radius2 * v1X, v2Y, radius2 * v1Z);
+            obj.makeTriangle();
 
-            points.push_back(fTriple(radius  * v2X, v1Y, radius  * v2Z));
-            points.push_back(fTriple(radius2 * v2X, v2Y, radius2 * v2Z));
-            points.push_back(fTriple(radius2 * v1X, v2Y, radius2 * v1Z));
+            obj.addVertex(radius  * v2X, v1Y, radius  * v2Z);
+            obj.addVertex(radius2 * v2X, v2Y, radius2 * v2Z);
+            obj.addVertex(radius2 * v1X, v2Y, radius2 * v1Z);
+            obj.makeTriangle();
         }
 
         radius = radius - radiusDiff;
         height = height + stackHeight;
     }
 
-    return points;
+    return obj.toString();
 }
 

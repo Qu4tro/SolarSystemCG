@@ -13,20 +13,22 @@
 
 #define BEZIER_N_VERTICES 16
 
-struct Bezier : Mesh {
+class Bezier : public Mesh {
 
-    Bezier(std::string bezier_file);
-    Bezier(std::vector<fTriple> points, std::vector<int> indices);
-    Bezier(std::vector<fTriple> points);
+    public:
+        Bezier(std::string bezier_file);
+        Bezier(std::vector<fTriple> points, std::vector<int> indices);
+        Bezier(std::vector<fTriple> points);
 
-    std::vector<fTriple> getPoints();
+        std::string getObj();
 
-    float B(int x, float u);
-    std::vector<fTriple> controlPoints;
-    std::vector<Bezier> patches;
-    fTriple bezierSurface(float s, float t);
+    private:
+        float B(int x, float u);
+        std::vector<fTriple> controlPoints;
+        std::vector<Bezier> patches;
+        fTriple bezierSurface(float s, float t);
 
-    int depth;
+        int depth;
 };
 
 #endif

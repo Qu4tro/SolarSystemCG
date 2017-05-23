@@ -5,7 +5,7 @@ LIBS = -lGL -lGLU -lglut -lm -lGLEW
 CC_FLAGS = -Wall -Wfloat-equal -Wshadow -Wpointer-arith -Wunreachable-code -Wno-unused-parameter -g
 
 COMMANDS = EnterContext.o ExitContext.o Color.o Scale.o Translate.o TranslateT.o Rotate.o RotateT.o DrawModel.o DrawModelVBO.o Command.o
-MODELS = Model_3D.o Model_stl.o
+MODELS = Model_3D.o
 CAMERAS = FPSCamera.o OrbitalCamera.o 
 
 all: Engine.o EngineState.o SceneParser.o tinyxml2.o fTriple.o $(COMMANDS) $(MODELS) $(CAMERAS)

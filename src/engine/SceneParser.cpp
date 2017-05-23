@@ -1,5 +1,7 @@
 #include "SceneParser.h"
 
+#include <iostream>
+
 using namespace tinyxml2;
 
 bool hasValue(XMLNode* node, const char* str){
@@ -127,14 +129,20 @@ Command* parse_model(XMLNode* model){
     XMLElement* element = model -> ToElement();
     std::string filename(element -> Attribute("file"));
 
-    Model* m;
+    // check if file exists TODO
+    Model* m = nullptr;
     if (hasEnding(filename, ".obj")){
         /* m = new Model_obj(filename); */
+        assert(0 && "Not implemented");
     } else if (hasEnding(filename, ".stl")) { 
-        m = new Model_stl(filename);
+        /* m = new Model_stl(filename); */
+        assert(0 && "Not implemented");
     } else if (hasEnding(filename, ".3d")) {
         m = new Model_3D(filename);
+    } else {
+        assert(0 && "Wrong filetype");
     }
+    m -> load();
 
     return new DrawModel(m);
 

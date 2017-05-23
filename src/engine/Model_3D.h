@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <vector>
 #include <string>
 
@@ -9,16 +10,24 @@
 
 #include "Model.h"
 
-struct Model_3D : Model {
+class Model_3D : public Model {
 
-    std::string model_path;
-    std::vector<float> points;
+    private:
+        std::vector<float> vertices;
+        std::vector<float> normals;
+        std::vector<float> texcoords;
 
-    Model_3D();
-    Model_3D(std::string);
-    void load();
+    public:
+        Model_3D();
+        Model_3D(std::string);
+        void load();
 
-    std::vector<float> getPoints();
+        std::vector<float> getVertices();
+        std::vector<float> getNormals();
+        std::vector<float> getTexcoords();
 
-    std::string toString();
+        std::string toString();
+
+        std::string model_path;
+        bool loaded;
 };

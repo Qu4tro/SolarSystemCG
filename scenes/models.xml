@@ -11,7 +11,7 @@
 	        <point X="1.239" Y="6.195" Z="8.26"/>
 	    </translate>
 		<models>
-            <model file="models/sphere.obj" />
+            <model file="models/sphere.3d" />
 		</models>	
 	</group>
 </scene>

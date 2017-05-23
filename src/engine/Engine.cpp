@@ -113,7 +113,7 @@ int main(int argc, char** argv){
 
     state = EngineState();
     state.setSceneCommands(parse_scene(argv[1]));
-    state.VBOify();
+    /* state.VBOify(); */
     state.printCommands();
 
     glutMainLoop();

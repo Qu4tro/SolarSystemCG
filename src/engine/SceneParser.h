@@ -7,8 +7,8 @@
 
 #include "tinyxml2.h"
 
-#include "Model_obj.h"
-#include "Model_stl.h"
+/* #include "Model_obj.h" */
+/* #include "Model_stl.h" */
 #include "Model_3D.h"
 
 #include "Commands/Command.h"
